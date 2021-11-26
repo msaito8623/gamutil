@@ -68,3 +68,14 @@ print(plt)
 ```
 
 <img src="man/figures/README-ex3-1.png" width="600px" height="500px" />
+
+-----
+
+## Acknowledgments
+
+Some functions in this package, especially gamutil::plot\_contour, are
+inspired by
+[mgcv::plot.gam](https://cran.r-project.org/web/packages/mgcv/index.html),
+[itsadug::fvisgam](https://cran.r-project.org/web/packages/itsadug/index.html),
+and
+[itsadug::pvisgam](https://cran.r-project.org/web/packages/itsadug/index.html).

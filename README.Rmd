@@ -64,3 +64,10 @@ The interval between contour lines can be adjusted by the "break.interval" argum
 plt = plot_contour(mdl, view=c('x0','x1'), axis.len=100, break.interval=1.5)
 print(plt)
 ```
+
+---
+
+## Acknowledgments
+
+Some functions in this package, especially gamutil::plot_contour, are inspired by [mgcv::plot.gam](https://cran.r-project.org/web/packages/mgcv/index.html), [itsadug::fvisgam](https://cran.r-project.org/web/packages/itsadug/index.html), and [itsadug::pvisgam](https://cran.r-project.org/web/packages/itsadug/index.html).
+
