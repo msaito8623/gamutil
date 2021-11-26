@@ -23,28 +23,44 @@ The goal of gamutil is to provide some short-cut functions to facilitate to work
 
 ## Installation
 
-You can install the released version of gamutil from [CRAN](https://CRAN.R-project.org) with:
+gamutil is still under development and therefore not available on [CRAN](https://CRAN.R-project.org). 
 
-``` r
-install.packages("gamutil")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+The development version is available from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("msaito8623/gamutil")
 ```
-## Example
+
+## Examples
 
 This is a basic example which shows you how to visualize prediction by a GA(M)M model with a contour plot:
 
-```{r example}
+```{r, ex1, fig.dim=c(6,6), out.width="600px", out.height="500px"}
 library(gamutil)
 library(mgcv)
 set.seed(8361)
 dat = gamSim(verbose=FALSE)
 mdl = gam(y ~ s(x0) + s(x1) + ti(x0,x1), data=dat)
 plt = plot_contour(mdl, view=c('x0','x1'))
+print(plt)
+```
+
+---
+
+The argument "axis.len" controls resolution of the contour plot to be produced (default=10). Bigger numbers for the argument would draw smoother contour lines.
+
+
+```{r, ex2, fig.dim=c(6,6), out.width="600px", out.height="500px"}
+plt = plot_contour(mdl, view=c('x0','x1'), axis.len=100)
+print(plt)
+```
+
+---
+
+The interval between contour lines can be adjusted by the "break.interval" argument.
+
+```{r, ex3, fig.dim=c(6,6), out.width="600px", out.height="500px"}
+plt = plot_contour(mdl, view=c('x0','x1'), axis.len=100, break.interval=1.5)
 print(plt)
 ```
