@@ -22,7 +22,7 @@ variables you would like to keep constant.}
 }
 \value{
 A data.frame with the variables specified by "target" being varied
-and the other variables being kept constant. The returnd data.frame should
+and the other variables being kept constant. The returned data.frame should
 be ready to be used for, e.g., predict.gam.
 }
 \description{

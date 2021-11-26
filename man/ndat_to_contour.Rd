@@ -63,7 +63,7 @@ set.seed(534)
 dat <- gamSim(verbose=FALSE)
 model <- gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0,x1), data=dat)
 to_vary <- c('x0','x1')
-ndat <- mdl_to_ndat(mdl=model, target=to_vary, len=100, method=median)
+ndat <- mdl_to_ndat(mdl=model, target=to_vary, len=10, method=median)
 ndat <- add_fit(ndat, model)
 plt <- ndat_to_contour(ndat, x='x0', y='x1', z='fit',
                        z.lwr='lwr', z.upr='upr')

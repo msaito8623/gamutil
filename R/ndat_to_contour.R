@@ -34,14 +34,14 @@
 #' dat <- gamSim(verbose=FALSE)
 #' model <- gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0,x1), data=dat)
 #' to_vary <- c('x0','x1')
-#' ndat <- mdl_to_ndat(mdl=model, target=to_vary, len=100, method=median)
+#' ndat <- mdl_to_ndat(mdl=model, target=to_vary, len=10, method=median)
 #' ndat <- add_fit(ndat, model)
 #' plt <- ndat_to_contour(ndat, x='x0', y='x1', z='fit',
 #'                        z.lwr='lwr', z.upr='upr')
 #' print(plt)
-#' @import ggplot2 metR RColorBrewer grDevices
 #' @importFrom ggplot2 ggplot aes aes_string stat_contour scale_fill_gradientn
-#' guides guide_legend theme element_blank
+#' guides guide_legend theme element_blank scale_colour_manual
+#' scale_linetype_manual scale_size_manual layer_scales
 #' @importFrom metR geom_contour_fill
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom grDevices colorRampPalette

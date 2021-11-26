@@ -16,7 +16,7 @@
 #' argument is used to produce a constant value for each of the numeric
 #' variables you would like to keep constant.
 #' @return A data.frame with the variables specified by "target" being varied
-#' and the other variables being kept constant. The returnd data.frame should
+#' and the other variables being kept constant. The returned data.frame should
 #' be ready to be used for, e.g., predict.gam.
 #' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
 #' @keywords utilities

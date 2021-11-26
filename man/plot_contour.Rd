@@ -7,6 +7,7 @@
 plot_contour(
   mdl,
   view,
+  axis.len = 10,
   break.interval = NULL,
   contour.line.breaks = NULL,
   contour.color.breaks = NULL,
@@ -18,6 +19,11 @@ plot_contour(
 
 \item{view}{A character vector with length of 2, which will be the x- and
 y-axes of the generated plot.}
+
+\item{axis.len}{A single numeric value, which will be length of each of the
+x- and y-axes. Since this function builds a contour plot, length of x-axis
+times length of y-axis is the total size of the contour plot to be produced.
+Reducing the size of the contour plot to be produced would help computation.}
 
 \item{break.interval}{A single numeric value, indicating the interval from
 one to another contour line. This argument is not used if

@@ -1,0 +1,23 @@
+---
+title: "Quick start"
+author: "Motoki Saito"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Quick start}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This package aims at providing some handy functions to make daily coding simple. The current version of this package contains several functions to visualize prediction by GAM(M), i.e., mgcv::gam and mgcv::bam.
+
+## Installation
+
+

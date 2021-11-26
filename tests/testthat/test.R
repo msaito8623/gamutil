@@ -1,5 +1,4 @@
 library(testthat)
-library(gamutil)
 library(mgcv)
 
 set.seed(534)
@@ -7,7 +6,6 @@ ddd <- gamSim(verbose=FALSE)
 mmm <- gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0,x1) + ti(x0,x1,x2), data=ddd)
 ttt <- c('x0','x2')
 load(system.file('testdata', 'ndat.rda', package='gamutil')) # loads "ndat"
-load(system.file('testdata', 'ndat_termsNULL.rda', package='gamutil')) # loads "ndat_termsNULL"
 
 test_that('mdl_to_ndat equals to the first 4 columns of ndat.rda', {
 	# vary() and constant() are also checked in this test.
@@ -20,68 +18,113 @@ test_that('add_fit equals to inst/testdata/ndat.rda', {
 	ndat_test <- mdl_to_ndat(mdl=mmm, target=ttt, len=10, method=median)
 	ndat_test <- add_fit(ndat_test, mmm, terms=ttt)
 	expect_s3_class(ndat_test, 'data.frame')
-	expect_true(all(ndat==ndat_test))
+	expect_equal(nrow(ndat_test), 100)
+	expect_equal(ncol(ndat_test), 8)
+	expect_equal(round(mean(ndat_test$y),  5),  7.67009)
+	expect_equal(round(mean(ndat_test$x0), 5),  0.50298)
+	expect_equal(round(mean(ndat_test$x1), 5),  0.52001)
+	expect_equal(round(mean(ndat_test$x2), 5),  0.50048)
+	expect_equal(round(mean(ndat_test$fit),5), -0.48284)
+	expect_equal(round(mean(ndat_test$se), 5),  0.44889)
+	expect_equal(round(mean(ndat_test$upr),5),  0.39696)
+	expect_equal(round(mean(ndat_test$lwr),5), -1.36264)
 })
 
-test_that('add_fit adds predicton of summed effects with terms=NULL (default).', {
+test_that('add_fit adds predicted summed effects with terms=NULL (default).', {
 	ndat_test <- mdl_to_ndat(mdl=mmm, target=ttt, len=10, method=median)
 	ndat_test <- add_fit(ndat_test, mmm)
 	expect_s3_class(ndat_test, 'data.frame')
-	expect_true(all(ndat_termsNULL==ndat_test))
+	expect_equal(nrow(ndat_test), 100)
+	expect_equal(ncol(ndat_test), 8)
+	expect_equal(round(mean(ndat_test$y),  5), 7.67009)
+	expect_equal(round(mean(ndat_test$x0), 5), 0.50298)
+	expect_equal(round(mean(ndat_test$x1), 5), 0.52001)
+	expect_equal(round(mean(ndat_test$x2), 5), 0.50048)
+	expect_equal(round(mean(ndat_test$fit),5), 7.22400)
+	expect_equal(round(mean(ndat_test$se), 5), 0.50308)
+	expect_equal(round(mean(ndat_test$upr),5), 8.21001)
+	expect_equal(round(mean(ndat_test$lwr),5), 6.23799)
 })
 
 test_that('plot_contour produces the same plot as plt1,plt2,plt3.', {
-	load(system.file('testdata', 'plt.Rdata', package='gamutil')) # loads "plt"
-	plt0 <- plt
 	plt <- plot_contour(mmm, view=ttt)
-	gtypes <- sapply(plt$layers, function(x) class(x$geom)[1])
+	gtypes <- vapply(plt$layers,
+			 function(x) class(x$geom)[1],
+			 character(1))
 	expect_s3_class(plt, 'ggplot')
-	expect_true(all(gtypes == c('GeomPolygon','GeomContour','GeomTextContour')))
-	plt0 <- ggplot_build(plt0)$data
-	plt  <- ggplot_build(plt)$data
-	expect_true(all(sapply(seq_along(plt0), function(x) all(plt0[[x]]==plt[[x]],na.rm=T))))
+	expect_match(gtypes[1], 'GeomPolygon')
+	expect_match(gtypes[2], 'GeomContour')
+	expect_match(gtypes[3], 'GeomTextContour')
+	scl <- layer_scales(plt)
+	expect_equal(round(scl$x$range$range[1],7), 0.0066501)
+	expect_equal(round(scl$x$range$range[2],7), 0.9993194)
+	expect_equal(round(scl$y$range$range[1],7), 0.0010856)
+	expect_equal(round(scl$y$range$range[2],7), 0.9998791)
 })
 
-test_that('mdl_to_ndat, add_fit, and ndat_to_contour produces the same as plot_contour.', {
+test_that('mdl_to_ndat, add_fit, and ndat_to_contour
+	  produces the same as plot_contour.', {
 	ndat_test <- mdl_to_ndat(mdl=mmm, target=ttt, len=100, method=median)
 	ndat_test <- add_fit(ndat_test, mmm, terms=ttt, ci.mult=1)
-	plt0 <- ndat_to_contour(ndat_test, x=ttt[1], y=ttt[2], z='fit', zlim=c(-3,5))
+	plt0 <- ndat_to_contour(ndat_test,
+				x=ttt[1], y=ttt[2], z='fit', zlim=c(-3,5))
 	plt1 <- plot_contour(mmm, view=ttt, zlim=c(-3,5))
-	gtypes0 <- sapply(plt0$layers, function(x) class(x$geom)[1])
-	gtypes1 <- sapply(plt1$layers, function(x) class(x$geom)[1])
+	gtypes0 <- vapply(plt0$layers,
+			  function(x) class(x$geom)[1],
+			  character(1))
+	gtypes1 <- vapply(plt1$layers,
+			  function(x) class(x$geom)[1],
+			  character(1))
 	expect_s3_class(plt0, 'ggplot')
 	expect_s3_class(plt1, 'ggplot')
-	expect_true(all(gtypes0 == c('GeomPolygon','GeomContour','GeomTextContour')))
-	expect_true(all(gtypes1 == c('GeomPolygon','GeomContour','GeomTextContour')))
-	plt0 <- ggplot_build(plt0)$data
-	plt1 <- ggplot_build(plt1)$data
-	expect_true(all(sapply(seq_along(plt0), function(x) all(plt0[[x]]==plt1[[x]],na.rm=T))))
+	expect_match(gtypes0[1], 'GeomPolygon')
+	expect_match(gtypes0[2], 'GeomContour')
+	expect_match(gtypes0[3], 'GeomTextContour')
+	expect_match(gtypes1[1], 'GeomPolygon')
+	expect_match(gtypes1[2], 'GeomContour')
+	expect_match(gtypes1[3], 'GeomTextContour')
+	scl0 <- layer_scales(plt0)
+	scl1 <- layer_scales(plt1)
+	expect_equal(round(scl0$x$range$range[1],7), 0.0066501)
+	expect_equal(round(scl0$x$range$range[2],7), 0.9993194)
+	expect_equal(round(scl0$y$range$range[1],7), 0.0010856)
+	expect_equal(round(scl0$y$range$range[2],7), 0.9998791)
+	expect_equal(round(scl1$x$range$range[1],7), 0.0066501)
+	expect_equal(round(scl1$x$range$range[2],7), 0.9993194)
+	expect_equal(round(scl1$y$range$range[1],7), 0.0010856)
+	expect_equal(round(scl1$y$range$range[2],7), 0.9998791)
 })
 
-test_that('constant() returns the most frequent value for a character/factor vector.', {
+test_that('constant() returns the most frequent value for character/factor.', {
 	vec <- c(rep('A',2), rep('B',3), rep('C',1))
 	expect_match(constant(vec), 'B')
 	vec <- factor(vec)
 	expect_match(constant(vec), 'B')
 })
 
-test_that('constant() returns an error for other inputs than numeric/character/factor.', {
+test_that('constant() returns an error if not numeric/character/factor.', {
 	lst <- list(rep('A',2), rep('B',3), rep('C',1))
 	expect_error(constant(lst))
 })
 
-test_that('vary() returns a sorted unique vector for a character/factor vector.', {
+test_that('vary() returns a sorted unique vector for character/factor.', {
 	vec <- c(rep('A',2), rep('B',3), rep('C',1))
 	vry <- vary(vec)
 	tst <- LETTERS[1:3]
-	expect_true(all(sapply(1:3, function(x) vry[x]==tst[x], USE.NAMES=FALSE)))
+	expect_true(all(vapply(1:3,
+			       function(x) vry[x]==tst[x],
+			       FUN.VALUE=logical(1),
+			       USE.NAMES=FALSE)))
 	vec <- factor(vec)
 	vry <- vary(vec)
 	tst <- LETTERS[1:3]
-	expect_true(all(sapply(1:3, function(x) vry[x]==tst[x], USE.NAMES=FALSE)))
+	expect_true(all(vapply(1:3,
+			       function(x) vry[x]==tst[x],
+			       FUN.VALUE=logical(1),
+			       USE.NAMES=FALSE)))
 })
 
-test_that('vary() returns an error for other inputs than numeric/character/factor.', {
+test_that('vary() returns an error if not numeric/character/factor.', {
 	lst <- list(rep('A',2), rep('B',3), rep('C',1))
 	expect_error(vary(lst))
 })
