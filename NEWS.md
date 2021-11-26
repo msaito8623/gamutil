@@ -1,3 +1,8 @@
+# gamutil 0.2.1 - 0.2.3
+
+- Updated README.Rmd.
+- Incremented version in DESCRIPTION.
+
 # gamutil 0.2.0
 
 - All passed: devtools::test, devtools::check, goodpractice::gp, rhub::check_for_cran().
