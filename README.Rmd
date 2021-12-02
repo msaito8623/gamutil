@@ -69,5 +69,5 @@ print(plt)
 
 ## Acknowledgments
 
-Some functions in this package, especially gamutil::plot_contour, are inspired by [mgcv::plot.gam](https://cran.r-project.org/web/packages/mgcv/index.html), [itsadug::fvisgam](https://cran.r-project.org/web/packages/itsadug/index.html), and [itsadug::pvisgam](https://cran.r-project.org/web/packages/itsadug/index.html).
+Some functions in this package, especially gamutil::plot_contour, are inspired by [mgcv::plot.gam](https://CRAN.R-project.org/package=mgcv), [itsadug::fvisgam](https://CRAN.R-project.org/package=itsadug), and [itsadug::pvisgam](https://CRAN.R-project.org/package=itsadug).
 

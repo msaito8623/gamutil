@@ -4,13 +4,16 @@
 \alias{mdl_to_ndat}
 \title{Create a data.frame from a GAM object for prediction}
 \usage{
-mdl_to_ndat(mdl, target = c(), len = 100, method = median)
+mdl_to_ndat(mdl, target = c(), cond = list(), len = 100, method = median)
 }
 \arguments{
 \item{mdl}{A GAM object (gam or bam), from which you would like to obtain
 predictions.}
 
 \item{target}{A character vector, which indicates variables to vary.}
+
+\item{cond}{A list of variables (as names) and their values. "cond"
+overrides "target".}
 
 \item{len}{A numeric, which specifies length of each varied variable, when
 the variable is numeric.}
@@ -36,13 +39,15 @@ object (i.e., mdl) and telling it which variables you would like to vary
 library(mgcv)
 set.seed(534)
 dat <- gamSim(verbose=FALSE)
-model <- gam(y ~ s(x0) + s(x1) + s(x2), data=dat)
+model <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data=dat)
 target_to_vary <- c('x0','x1')
-ndat <- mdl_to_ndat(mdl=model, target=target_to_vary, len=4, method=median)
-print(length(unique(ndat$y))==1) # y is fixed constant.
+condlist <- list('x2'=quantile(dat$x2, probs=c(0.25,0.75)))
+ndat <- mdl_to_ndat(mdl=model, target=target_to_vary,
+                    cond=condlist, len=4, method=median)
 print(length(unique(ndat$x0))==4) # x0 is varied with length=4.
 print(length(unique(ndat$x1))==4) # x1 is varied with length=4.
-print(length(unique(ndat$x2))==1) # x2 is fixed constant.
+print(length(unique(ndat$x2))==2) # x2 is 25\% or 75\% quantiles.
+print(length(unique(ndat$x3))==1) # x3 is fixed the median.
 }
 \author{
 Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
