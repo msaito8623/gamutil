@@ -1,6 +1,6 @@
 Package: gamutil
 Title: Handy Functions to Work with GAM
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: 
     person(given = "Motoki",
            family = "Saito",

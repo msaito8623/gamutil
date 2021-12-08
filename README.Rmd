@@ -48,11 +48,10 @@ print(plt)
 
 ---
 
-The argument "axis.len" controls resolution of the contour plot to be produced (default=10). Bigger numbers for the argument would draw smoother contour lines.
-
+The argument "axis.len" controls resolution of the contour plot to be produced (default=50). Bigger numbers for the argument would draw smoother contour lines.
 
 ```{r, ex2, fig.dim=c(6,6), out.width="600px", out.height="500px"}
-plt = plot_contour(mdl, view=c('x0','x1'), axis.len=100)
+plt = plot_contour(mdl, view=c('x0','x1'), axis.len=10)
 print(plt)
 ```
 
@@ -62,6 +61,66 @@ The interval between contour lines can be adjusted by the "break.interval" argum
 
 ```{r, ex3, fig.dim=c(6,6), out.width="600px", out.height="500px"}
 plt = plot_contour(mdl, view=c('x0','x1'), axis.len=100, break.interval=1.5)
+print(plt)
+```
+
+---
+
+In default, the summed effect is drawn (as the figures above). For partial effects, summed=FALSE.
+
+```{r, ex4, fig.dim=c(6,6), out.width="600px", out.height="500px"}
+plt = plot_contour(mdl, view=c('x0','x1'), summed=FALSE, axis.len=100)
+print(plt)
+```
+
+---
+
+Which terms are selected for the plot? In default, the term that has no more or less than the variables included in "view". In this example, the term to selected is ti(x0,x1). Which terms to be included can be controlled by "terms.size". The argument takes "min", "medium", or "max", and its default value is "min". Since it selects only one term, it corresponds to mgcv::plot.gam or itsadug::pvisgam.
+
+Sometimes, not only one term but several terms can be of interest. For example, the sum of the partial effects of s(x0), s(x1), and ti(x0,x1) may be of interest, but you would like to exclude s(x2). This choice of terms can be achieved by terms.size="medium", with which the terms that contain at least one of the variables specified by "view" and "cond", excluding other variables.
+
+```{r, ex5, fig.dim=c(6,6), out.width="600px", out.height="500px"}
+plt = plot_contour(mdl, view=c('x0','x1'), summed=FALSE, axis.len=100, terms.size="medium", verbose=TRUE)
+print(plt)
+```
+
+---
+
+Note that the "by"-variable, which can be specified by "cond", is also taken into consideration in search of pertinent terms.
+
+```{r, error=TRUE}
+set.seed(4195)
+dat2 = gamSim(eg=6, verbose=FALSE)
+mdl2 = gam(y ~ s(x0, by=fac) + s(x1, by=fac) + ti(x0,x1, by=fac), data=dat2)
+plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
+```
+
+The example above gives an error, complaining there is no term matched. This is because the function looked for the term that only contains "x0" and "x1" and not other. But all the terms have "by=fac". In other words, in the example above, the function does not know which level of the factor variable "fac" to use without "cond".
+
+Telling the function which level of the factor variable to use through "cond", the function draws a contour plot for that factor level.
+
+```{r, ex6, fig.dim=c(6,6), out.width="600px", out.height="500px"}
+plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac='1'), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
+print(plt)
+```
+
+Multiple factor levels can be drawn in separate panels by giving "cond" a vector of the pertinent factor levels:
+
+```{r, ex7, fig.dim=c(8,4), out.width="1200px", out.height="400px"}
+plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac=c('1','4')), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
+print(plt)
+```
+
+---
+
+The produced plot is a ggplot object, which means you can modify the plot as you would usually do for a ggplot object created by ggplot2::ggplot.
+
+```{r, ex8, fig.dim=c(8,4), out.width="1200px", out.height="400px"}
+library(ggplot2)
+plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac=c('1','4')), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
+plt = plt + xlab('Variable "x0"')
+plt = plt + ylab('Variable "x1"')
+plt = plt + labs(title='Partial effect of ti(x0,x1):fac1')
 print(plt)
 ```
 

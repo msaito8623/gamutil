@@ -4,7 +4,15 @@
 \alias{add_fit}
 \title{Add predicted values with standard errors to a data.frame}
 \usage{
-add_fit(ndat, mdl, terms = NULL, ci.mult = qnorm(0.975))
+add_fit(
+  ndat,
+  mdl,
+  terms = NULL,
+  cond = list(),
+  terms.size = "min",
+  ci.mult = qnorm(0.975),
+  verbose = FALSE
+)
 }
 \arguments{
 \item{ndat}{A data.frame, which should already contain combinations of
@@ -15,7 +23,30 @@ values of the predictors in the model.}
 \item{terms}{A character string, which specifies which terms in the model
 you would like to use to obtain predicted values.}
 
+\item{cond}{A list, whose names are variable names and whose values are
+their corresponding values.}
+
+\item{terms.size}{A character of length 1, which is "min" (default),
+"medium", or "max". "min" selects only one term that exactly contains the
+variables specified by "terms" and "cond" (i.e. the target variables) with
+no other variable. Therefore, it corresponds to a partial effect by the
+term, as produced by mgcv::plot.gam or itsadug::pvisgam. "medium" selects
+the terms that contain at least one of the target variables but no other.
+This option is useful to see the sum of partial effects, e.g. s(x0) + s(x1)
+\itemize{
+\item ti(x0,x1). "max" selects all the terms that contain at least one of the
+target variables even if the term has other variables than given by "terms"
+and "cond". For example, terms=c(x0,x1) and cond=list(fac='a') with
+terms.size='max' also selects ti(x0,x2,by=fac), which contains "x2" that are
+not specified by either "terms" or "cond", in addition to s(x0,by=fac),
+s(x1,by=fac), ti(x0,x1,by=fac), and so on.
+}}
+
 \item{ci.mult}{A numeric to multiply standard errors.}
+
+\item{verbose}{Logical. With this argument TRUE, it is printed out which
+terms are selected to calculate predicted values and some explanations will
+be printed when an error occurs.}
 }
 \value{
 The data.frame provided through "ndat" with additional columns for
@@ -32,18 +63,29 @@ errors based on the model provided through "mdl". "ndat" can be created by
 gamutil::to_ndat.
 }
 \examples{
+\dontrun{
 library(mgcv)
 set.seed(534)
-dat <- gamSim(verbose=FALSE)
-model <- gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0,x1), data=dat)
+dat <- gamSim(eg=6, verbose=FALSE)
+model <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3)
+               + ti(x0,x1) + ti(x0,x2) + ti(x0,x3)
+               + ti(x1,x2) + ti(x1,x3) + ti(x2,x3), data=dat)
 target_to_vary <- c('x0','x1')
 ndat <- mdl_to_ndat(mdl=model, target=target_to_vary, len=4, method=median)
 terms_to_predict <- target_to_vary
-# Prediction of the summed effect by all the terms.
-ndat1 <- add_fit(ndat, model)
-# Prediction of partially summed effects by the terms with "x0" and "x1"
-# (i.e., s(x0), s(x1), ti(x0,x1)).
-ndat2 <- add_fit(ndat, model, terms=terms_to_predict)
+# Prediction of the summed effect by all the terms:
+ndat1 <- add_fit(ndat, model, verbose=TRUE)
+# Partial effect of ti(x0, x1):
+ndat2 <- add_fit(ndat, model, terms=terms_to_predict, terms.size="min",
+                 verbose=TRUE)
+# Sum of subordinate partial effects (i.e., s(x0), s(x1), ti(x0,x1)):
+ndat3 <- add_fit(ndat, model, terms=terms_to_predict, terms.size="medium",
+                 verbose=TRUE)
+# Sum of all the pertinent partial effects (i.e., s(x0), s(x1), ti(x0,x1),
+# ti(x0,x2), ti(x0,x3), ti(x1,x2), ti(x1,x3)):
+ndat4 <- add_fit(ndat, model, terms=terms_to_predict, terms.size="max",
+                 verbose=TRUE)
+}
 }
 \author{
 Motoki Saito, \email{motoki.saito@uni-tuebingen.de}

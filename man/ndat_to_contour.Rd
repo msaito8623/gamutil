@@ -11,6 +11,8 @@ ndat_to_contour(
   z,
   z.lwr = "lwr",
   z.upr = "upr",
+  facet.col = NULL,
+  se = TRUE,
   break.interval = NULL,
   line.breaks = NULL,
   color.breaks = NULL,
@@ -36,6 +38,12 @@ lower confidence interval boundary.}
 \item{z.upr}{A character string with length 1 for the name of the column for
 upper confidence interval boundary.}
 
+\item{facet.col}{A character of length 1. Split plots will be drawn for the
+column with the name specified by this argument.}
+
+\item{se}{Logical to indicate whether contour lines should be drawn for 1 x
+standard error.}
+
 \item{break.interval}{A numeric, indicating the interval from one to another
 contour line. This argument is not used if "line.breaks" and
 "color.breaks" are provided.}
@@ -58,16 +66,21 @@ plot from the data.frame. "ndat" necessary for this function can be
 generated with gamutil::mdl_to_ndat and gamutil::add_fit.
 }
 \examples{
+\dontrun{
 library(mgcv)
 set.seed(534)
-dat <- gamSim(verbose=FALSE)
-model <- gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0,x1), data=dat)
-to_vary <- c('x0','x1')
-ndat <- mdl_to_ndat(mdl=model, target=to_vary, len=10, method=median)
-ndat <- add_fit(ndat, model)
-plt <- ndat_to_contour(ndat, x='x0', y='x1', z='fit',
-                       z.lwr='lwr', z.upr='upr')
+dat <- gamSim(eg=6,verbose=FALSE)
+model <- gam(y ~ s(x0,by=fac) + s(x1,by=fac) + s(x2) + ti(x0,x1,by=fac),
+             data=dat)
+view <- c('x0','x1')
+cnd  <- list(fac=c('1','4'))
+ndat <- mdl_to_ndat(mdl=model, target=view, cond=cnd, len=10, method=median)
+ndat <- add_fit(ndat, model, terms=view, cond=cnd, terms.size="min",
+                ci.mult=1)
+plt <- ndat_to_contour(ndat, x='x0', y='x1', z='fit', z.lwr='lwr',
+                       z.upr='upr', facet.col='fac', se=TRUE)
 print(plt)
+}
 }
 \author{
 Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
