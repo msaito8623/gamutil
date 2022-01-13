@@ -41,7 +41,7 @@
 mdl_to_ndat <- function (mdl, target=c(), cond=list(), len=100, method=median) {
 	.dat <- mdl$model
 	depv <- as.character(as.list(mdl$formula)[[2]])
-	.dat <- .dat[,!(colnames(.dat)%in%c(depv,'(AR.start)'))]
+	.dat <- .dat[,!(colnames(.dat)%in%c(depv,'(AR.start)')),drop=FALSE]
 	.inner <- function (i) {
 		if (i%in%names(cond)) {
 			aaa <- cond[[i]]

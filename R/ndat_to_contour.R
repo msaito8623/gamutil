@@ -81,7 +81,11 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 	}
 	line.breaks <- unique(line.breaks)
 	color.breaks <- unique(color.breaks)
-	cdat <- ndat[,c(x, y, z, z.lwr, z.upr)]
+	if (se) {
+		cdat <- ndat[,c(x, y, z, z.lwr, z.upr)]
+	} else {
+		cdat <- ndat[,c(x, y, z)]
+	}
 
 	stck <- cdat[,c(x, y)]
 	if (se) {

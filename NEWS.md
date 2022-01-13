@@ -1,3 +1,8 @@
+# gamutil 0.5.0
+
+1. Updated mdl_to_ndat:
+    - It now works properly when the fitted model has only one predictor.
+
 # gamutil 0.4.0
 
 1. Three new arguments for gamutil::add_fit:

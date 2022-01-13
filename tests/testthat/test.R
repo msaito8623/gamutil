@@ -49,6 +49,16 @@ test_that('mdl_to_ndat works with "cond" for only a subset of variables.', {
 	expect_equal(round(mean(ndat$x1),5),      25)
 	expect_equal(round(mean(ndat$x2),5), 0.50012)
 })
+test_that('mdl_to_ndat works when the model has only one predictor', {
+	tmdl  <- gam(y ~ s(x0), data=tdat)
+	tgt <- c('x0')
+	ndat <- mdl_to_ndat(mdl=tmdl, target=tgt, len=10, method=median)
+	expect_s3_class(ndat, 'data.frame')
+	expect_equal(colnames(ndat), c('x0'))
+	expect_equal(nrow(ndat), 10)
+	expect_length(unique(ndat$x0), 10)
+	expect_equal(round(mean(ndat$x0),5), 0.50298)
+})
 test_that('add_fit works properly with "terms".', {
 	tgt <- c('x0','x1')
 	cnd <- list(fac='1')
