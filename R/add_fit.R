@@ -98,6 +98,7 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 			cols <- apply(cols, 1, paste, collapse='')
 			cols <- c(cols, cols.noby)
 		}
+		cols <- remove.k(cols)
 		sw   <- suppressWarnings
 		pg   <- predict.gam
 		pred <- sw(pg(mdl, ndat, se.fit=TRUE,
@@ -116,7 +117,7 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 }
 find.pos <- function (cols, terms, cond, terms.size) {
 	pos <- cols
-	pos <- gsub(', *k *= *[0-9]+', '',pos)
+	pos <- remove.k(pos)
 	pos <- gsub(', *bs *= *"re"', '',pos)
 	pos <- gsub('by *= *', '',pos)
 	pos <- gsub('^[a-z]+\\((.+)\\)$', '\\1', pos)
@@ -134,6 +135,11 @@ find.pos <- function (cols, terms, cond, terms.size) {
 	} else {
 		stop('"terms.size" must be "max", "medium", or "min".')
 	}
+	return(pos)
+}
+remove.k = function (pos) {
+	pos <- gsub(', *k *= *[0-9]+', '',pos)
+	pos <- gsub(', *k *= *c\\([0-9, ]+\\)', '',pos)
 	return(pos)
 }
 pos.max <- function (x, terms) {

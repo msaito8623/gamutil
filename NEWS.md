@@ -1,3 +1,8 @@
+# gamutil 0.5.1
+
+1. Updated add_fit:
+    - The previous version had a problem to find pertinent terms automatically according to the vector of character strings given by the argument "terms" when the pertinent terms have multiple "k" values, e.g. ti(x,y,k=c(3,3)). This issue is resolved.
+
 # gamutil 0.5.0
 
 1. Updated mdl_to_ndat:
