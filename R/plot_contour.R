@@ -95,7 +95,7 @@
 plot_contour <- function (mdl, view, cond=list(), summed=TRUE, axis.len=50,
 			  terms.size='min', se=TRUE, break.interval=NULL,
 			  contour.line.breaks=NULL, contour.color.breaks=NULL,
-			  zlim=NULL, verbose=FALSE)
+			  zlim=NULL, facet.labeller=NULL, verbose=FALSE)
 {
 	if (length(view)!=2) {
 		stop('"view" must be length 2.')
@@ -116,10 +116,13 @@ plot_contour <- function (mdl, view, cond=list(), summed=TRUE, axis.len=50,
 	} else {
 		facet.cn <- NULL
 	}
-	plt  <- ndat_to_contour(ndat, x, y, 'fit', 'lwr', 'upr',
-				facet.cn, se, break.interval,
-				contour.line.breaks, contour.color.breaks,
-				zlim)
+	plt  <- ndat_to_contour(ndat=ndat, x=x, y=y, z='fit', z.lwr='lwr',
+				z.upr='upr', facet.col=facet.cn,
+				facet.labeller=facet.labeller, se=se,
+				break.interval=break.interval,
+				line.breaks=contour.line.breaks,
+				color.breaks=contour.color.breaks,
+				zlim=zlim)
 	return(plt)
 }
 find.facet <- function (x, ndat) {

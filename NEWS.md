@@ -1,3 +1,12 @@
+# gamutil 0.5.2
+
+1. Updated ndat_to_contour:
+    - The previous version had a problem in facet_grid. Specifically, because of the problem, geom_hline could not be added.
+2. Updated ndat_to_contour:
+    - A new argument "facet.labeller" is implemented, with which you can adjust labels of facets when you have a variable for facet.col.
+3. Updated plot_contour:
+    - A new argument "facet.labeller" is implemented, according to the change to ndat_to_contour.
+
 # gamutil 0.5.1
 
 1. Updated add_fit:

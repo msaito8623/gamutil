@@ -56,8 +56,9 @@
 #' @importFrom grDevices colorRampPalette
 #' @export
 ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
-			      facet.col=NULL, se=TRUE, break.interval=NULL,
-			      line.breaks=NULL, color.breaks=NULL, zlim=NULL)
+			      facet.col=NULL, facet.labeller=NULL, se=TRUE,
+			      break.interval=NULL, line.breaks=NULL,
+			      color.breaks=NULL, zlim=NULL)
 {
 	if (is.null(zlim)) {
 		zmin <- min(ndat[[z]], na.rm=TRUE)
@@ -82,12 +83,12 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 	line.breaks <- unique(line.breaks)
 	color.breaks <- unique(color.breaks)
 	if (se) {
-		cdat <- ndat[,c(x, y, z, z.lwr, z.upr)]
+		cdat <- ndat[,c(x, y, z, z.lwr, z.upr, facet.col)]
 	} else {
-		cdat <- ndat[,c(x, y, z)]
+		cdat <- ndat[,c(x, y, z, facet.col)]
 	}
 
-	stck <- cdat[,c(x, y)]
+	stck <- cdat[,c(x, y, facet.col)]
 	if (se) {
 		stck <- rbind(stck,stck,stck)
 		stck$fit  <- c(cdat[[z]], cdat[[z.upr]], cdat[[z.lwr]])
@@ -142,7 +143,11 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 		if (!is.factor(ndat[[facet.col]])) {
 			ndat[[facet.col]] <- factor(ndat[[facet.col]])
 		}
-		plt <- plt + facet_wrap(~ndat[[facet.col]])
+		if (is.null(facet.labeller)) {
+			plt <- plt + facet_wrap(~get(facet.col))
+		} else {
+			plt <- plt + facet_wrap(~get(facet.col), labeller=as_labeller(facet.labeller))
+		}
 	}
 	return(plt)
 }
