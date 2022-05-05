@@ -12,6 +12,7 @@ ndat_to_contour(
   z.lwr = "lwr",
   z.upr = "upr",
   facet.col = NULL,
+  facet.labeller = NULL,
   se = TRUE,
   break.interval = NULL,
   line.breaks = NULL,

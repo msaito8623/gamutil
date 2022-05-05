@@ -1,3 +1,7 @@
+# gamutil 0.5.3
+
+1. Minor update: verbose in add_fit() lists selected terms with new lines.
+
 # gamutil 0.5.2
 
 1. Updated ndat_to_contour:

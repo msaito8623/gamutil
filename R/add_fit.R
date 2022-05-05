@@ -107,8 +107,8 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 		ndat$se  <- sqrt(rowSums(pred$se.fit^2))
 
 		if (verbose) {
-			txt <- paste(cols, collapse=', ')
-			cat(sprintf('Selected: %s\n', txt))
+			txt <- paste(cols, collapse='\n')
+			cat(sprintf('Selected:\n%s\n', txt))
 		}
 	}
 	ndat$upr <- ndat$fit + ci.mult * ndat$se

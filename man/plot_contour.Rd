@@ -16,6 +16,7 @@ plot_contour(
   contour.line.breaks = NULL,
   contour.color.breaks = NULL,
   zlim = NULL,
+  facet.labeller = NULL,
   verbose = FALSE
 )
 }
