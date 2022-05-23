@@ -362,8 +362,8 @@ test_that('plot_contour, summed=FALSE, cond=list(fac="1"),
 	bld <- ggplot_build(plt)
 	expect_equal(length(levels(bld$data[[1]]$PANEL)), 1) # facet number
 	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']),  10)
-	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']),  82)
-	expect_match(names(table(bld$data[[1]]$order)[1]), '(-44.96, -43.82]',
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']),  54)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-17.28, -16.10]',
 		     fixed=TRUE)
 })
 test_that('plot_contour, summed=FALSE, cond=list(fac="1"),
@@ -373,8 +373,8 @@ test_that('plot_contour, summed=FALSE, cond=list(fac="1"),
 	bld <- ggplot_build(plt)
 	expect_equal(length(levels(bld$data[[1]]$PANEL)), 1) # facet number
 	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']),  10)
-	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']),  82)
-	expect_match(names(table(bld$data[[1]]$order)[1]), '(-44.96, -43.82]',
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']),  54)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-17.28, -16.10]',
 		     fixed=TRUE)
 })
 test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4")),
@@ -395,8 +395,8 @@ test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4")),
 	bld <- ggplot_build(plt)
 	expect_equal(length(levels(bld$data[[1]]$PANEL)), 2) # facet number
 	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']),  10)
-	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 82)
-	expect_match(names(table(bld$data[[1]]$order)[1]), '(-44.96, -43.82]',
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']),  54)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-17.28, -16.10]',
 		     fixed=TRUE)
 })
 test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4")),
@@ -406,8 +406,8 @@ test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4")),
 	bld <- ggplot_build(plt)
 	expect_equal(length(levels(bld$data[[1]]$PANEL)), 2) # facet number
 	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']),  10)
-	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 82)
-	expect_match(names(table(bld$data[[1]]$order)[1]), '(-44.96, -43.82]',
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']),  54)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-17.28, -16.10]',
 		     fixed=TRUE)
 })
 test_that('plot_contour, summed=FALSE, cond=list(fac="1",x2=x2max),
@@ -421,9 +421,9 @@ test_that('plot_contour, summed=FALSE, cond=list(fac="1",x2=x2max),
 			    terms.size='medium')
 	bld <- ggplot_build(plt)
 	expect_equal(length(levels(bld$data[[1]]$PANEL)), 1) # facet number
-	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']),  10)
-	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 85)
-	expect_match(names(table(bld$data[[1]]$order)[1]), '(-48.46, -47.31]',
+	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']), 10)
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 54)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-20.57, -19.40]',
 		     fixed=TRUE)
 })
 test_that('plot_contour, summed=FALSE, cond=list(fac="1",x2=x2max),
@@ -432,9 +432,9 @@ test_that('plot_contour, summed=FALSE, cond=list(fac="1",x2=x2max),
 			    terms.size='max')
 	bld <- ggplot_build(plt)
 	expect_equal(length(levels(bld$data[[1]]$PANEL)), 1) # facet number
-	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']),  10)
-	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 85)
-	expect_match(names(table(bld$data[[1]]$order)[1]), '(-48.46, -47.31]',
+	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']), 10)
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 54)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-20.57, -19.40]',
 		     fixed=TRUE)
 })
 test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4"),x2=x2max),
@@ -450,8 +450,8 @@ test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4"),x2=x2max),
 	bld <- ggplot_build(plt)
 	expect_equal(length(levels(bld$data[[1]]$PANEL)), 2) # facet number
 	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']), 10)
-	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 85)
-	expect_match(names(table(bld$data[[1]]$order)[1]), '(-48.46, -47.31]',
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 54)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-20.57, -19.40]',
 		     fixed=TRUE)
 })
 test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4"),x2=x2max),
@@ -461,8 +461,8 @@ test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4"),x2=x2max),
 	bld <- ggplot_build(plt)
 	expect_equal(length(levels(bld$data[[1]]$PANEL)), 2) # facet number
 	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']), 10)
-	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 85)
-	expect_match(names(table(bld$data[[1]]$order)[1]), '(-48.46, -47.31]',
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 54)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-20.57, -19.40]',
 		     fixed=TRUE)
 })
 test_that('add_fit, verbose, when no term is matched (terms.size=min).', {
@@ -499,7 +499,7 @@ test_that('add_fit prints out a verbose message to indicate which terms are
 	ndat <- mdl_to_ndat(mdl=tmdl, target=tgt, cond=cnd, len=50,
 			    method=median)
 	expect_output(add_fit(ndat, tmdl, terms=tgt, cond=cnd, ci.mult=1,
-			      verbose=TRUE),'Selected: ti(x0,x1):fac1',
+			      verbose=TRUE),'Selected:\nti(x0,x1):fac1',
 		      fixed=TRUE)
 })
 test_that('plot_contour returns an error when view is not length=2.', {
@@ -616,4 +616,38 @@ test_that('ndat_to_contour corrects non-factor "facet.col" to factor.', {
 	expect_match(names(table(bld$data[[1]]$order)[1]), '(-20.0, -19.6]',
 		     fixed=TRUE)
 
+})
+test_that('ndat_to_contour handles the argument facet.col=="type".', {
+	tgt <- c('x0','x1')
+	cnd <- list(fac=c(1,4))
+	ndat <- mdl_to_ndat(mdl=tmdl, target=tgt, cond=cnd, len=50,
+			    method=median)
+	ndat <- add_fit(ndat, tmdl, terms=tgt, cond=cnd, terms.size='min',
+			ci.mult=1, verbose=FALSE)
+	colnames(ndat)[colnames(ndat)=='fac'] <- 'type'
+	plt <- ndat_to_contour(ndat, 'x0', 'x1', 'fit', se=FALSE, facet.col='type')
+	bld <- ggplot_build(plt)
+	expect_length(unique(bld$data[[2]]$colour), 1)
+	expect_match(unique(bld$data[[2]]$colour), '#000000')
+	expect_length(unique(bld$data[[2]]$linetype), 1)
+	expect_match(unique(bld$data[[2]]$linetype), 'solid')
+	expect_length(levels(bld$data[[1]]$PANEL), 2) # facet number
+	expect_equal(unname(table(bld$data[[1]]$fill)['#A30743']), 10)
+	expect_equal(unname(table(bld$data[[1]]$fill)['#FEF6B1']), 100)
+	expect_match(names(table(bld$data[[1]]$order)[1]), '(-46.31, -45.20]',
+		     fixed=TRUE)
+})
+test_that('ndat_to_contour handles the argument facet.labeller properly.', {
+	tgt <- c('x0','x1')
+	cnd <- list(fac=c(1,4))
+	ndat <- mdl_to_ndat(mdl=tmdl, target=tgt, cond=cnd, len=50,
+			    method=median)
+	ndat <- add_fit(ndat, tmdl, terms=tgt, cond=cnd, terms.size='min',
+			ci.mult=1, verbose=FALSE)
+	plt <- ndat_to_contour(ndat, 'x0', 'x1', 'fit', se=FALSE,
+			       facet.col='fac',
+			       facet.labeller=c('1'='One','4'='Four'))
+	bld <- ggplot_build(plt)
+	expect_mapequal(bld$layout$facet_params$plot_env$facet.labeller,
+			c('1'='One','4'='Four'))
 })

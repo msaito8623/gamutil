@@ -1,6 +1,6 @@
 ## Test environments
 * Ubuntu 16.04, R 4.1.2 (local machine)
-* Windows Server 2008 R2 SP1, R-devel, 32/64 bit (on rhub)
+* Windows Server 2022, R-devel, 64 bit (on rhub)
 * Ubuntu Linux 20.04.1 LTS, R-release, GCC (on rhub)
 * Fedora Linux, R-devel, clang, gfortran (on rhub)
 

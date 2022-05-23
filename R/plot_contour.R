@@ -38,6 +38,7 @@
 #' @param contour.color.breaks A numeric vector for colors for the z-axis.
 #' @param zlim A numeric vector with length of 2, which indicates the range of
 #' the z-axis.
+#' @param facet.labeller A named vector, whose names are old labels and whose values are new values. Facet labels are renamed according to this named vector.
 #' @param verbose Logical. With verbose=TRUE, terms selected for prediction
 #' were printed out and also some explanation will be provided when no term is
 #' matched.

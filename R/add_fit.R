@@ -137,7 +137,7 @@ find.pos <- function (cols, terms, cond, terms.size) {
 	}
 	return(pos)
 }
-remove.k = function (pos) {
+remove.k <- function (pos) {
 	pos <- gsub(', *k *= *[0-9]+', '',pos)
 	pos <- gsub(', *k *= *c\\([0-9, ]+\\)', '',pos)
 	return(pos)

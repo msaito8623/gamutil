@@ -1,3 +1,9 @@
+# gamutil 0.5.4
+
+In this version, you can...
+1. give a data.table to the argument "ndat" of ndat_to_contour.
+2. use the column name "type" for the argument "facet.col" of ndat_to_contour.
+
 # gamutil 0.5.3
 
 1. Minor update: verbose in add_fit() lists selected terms with new lines.

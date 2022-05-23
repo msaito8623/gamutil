@@ -19,6 +19,7 @@
 #' upper confidence interval boundary.
 #' @param facet.col A character of length 1. Split plots will be drawn for the
 #' column with the name specified by this argument.
+#' @param facet.labeller A named vector, whose names are old labels and whose labels are corresponding new labels. This named vector is used to rename names of facets.
 #' @param se Logical to indicate whether contour lines should be drawn for 1 x
 #' standard error.
 #' @param break.interval A numeric, indicating the interval from one to another
@@ -60,6 +61,7 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 			      break.interval=NULL, line.breaks=NULL,
 			      color.breaks=NULL, zlim=NULL)
 {
+	ndat <- data.frame(ndat)
 	if (is.null(zlim)) {
 		zmin <- min(ndat[[z]], na.rm=TRUE)
 		zmax <- max(ndat[[z]], na.rm=TRUE)
@@ -89,26 +91,30 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 	}
 
 	stck <- cdat[,c(x, y, facet.col)]
+	colname.type <- 'type'
+	if (colname.type %in% colnames(stck)) {
+		colname.type <- '.type'
+	}
 	if (se) {
 		stck <- rbind(stck,stck,stck)
-		stck$fit  <- c(cdat[[z]], cdat[[z.upr]], cdat[[z.lwr]])
-		stck$type <- rep(c(z, z.upr, z.lwr), each=nrow(cdat))
+		stck[[z]]  <- c(cdat[[z]], cdat[[z.upr]], cdat[[z.lwr]])
+		stck[[colname.type]] <- rep(c(z, z.upr, z.lwr), each=nrow(cdat))
 		lvls <- c(z.lwr, z, z.upr)
 		lbls <- c('+1se','','-1se')
-		stck$type <- factor(stck$type, levels=lvls, labels=lbls)
+		stck[[colname.type]] <- factor(stck[[colname.type]], levels=lvls, labels=lbls)
 	} else {
-		stck$fit  <- c(cdat[[z]])
-		stck$type <- rep(c(z), each=nrow(cdat))
-		stck$type <- factor(stck$type)
+		stck[[z]]  <- c(cdat[[z]])
+		stck[[colname.type]] <- rep(c(z), each=nrow(cdat))
+		stck[[colname.type]] <- factor(stck[[colname.type]])
 	}
 
 	plt <- ggplot(mapping=aes_string(x=x, y=y, z=z))
 	plt <- plt + metR::geom_contour_fill(data=cdat, mapping=aes(),
 					     breaks=color.breaks)
 	plt <- plt + stat_contour(data=stck,
-				  mapping=aes_string(linetype='type',
-						     colour='type',
-						     size='type'),
+				  mapping=aes_string(linetype=colname.type,
+						     colour=colname.type,
+						     size=colname.type),
 				  breaks=line.breaks)
 	if (se) {
 		cls <- brewer.pal(3,'Dark2')[1:2]
@@ -146,7 +152,8 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 		if (is.null(facet.labeller)) {
 			plt <- plt + facet_wrap(~get(facet.col))
 		} else {
-			plt <- plt + facet_wrap(~get(facet.col), labeller=as_labeller(facet.labeller))
+			plt <- plt + facet_wrap(~get(facet.col),
+				labeller=ggplot2::as_labeller(facet.labeller))
 		}
 	}
 	return(plt)
