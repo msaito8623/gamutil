@@ -1,3 +1,7 @@
+# gamutil 0.5.5
+
+1. Added two new arguments to ndat_to_contour. One of them is contour.labels. The argument takes a logical value. With TRUE, numeric values of contour labels are drawn. The other new argument is contour.line.size. The argument controls thickness of contour lines.
+
 # gamutil 0.5.4
 
 In this version, you can...

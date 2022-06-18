@@ -29,6 +29,9 @@
 #' @param color.breaks A numeric vector for colors for the z-axis.
 #' @param zlim A numeric vector with length 2, which indicates the range of the
 #' z-axis.
+#' @param contour.labels Logical. With TRUE (default), contour labels will be
+#' drawn.
+#' @param contour.line.size A numeric with its length 1. It controls thickness of contour lines. The default is 0.5.
 #' @return A ggplot object of a contour plot with predicted values being colors
 #' (z-axis).
 #' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
@@ -59,7 +62,8 @@
 ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 			      facet.col=NULL, facet.labeller=NULL, se=TRUE,
 			      break.interval=NULL, line.breaks=NULL,
-			      color.breaks=NULL, zlim=NULL)
+			      color.breaks=NULL, zlim=NULL,
+			      contour.labels=TRUE, contour.line.size=0.5)
 {
 	ndat <- data.frame(ndat)
 	if (is.null(zlim)) {
@@ -98,10 +102,12 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 	if (se) {
 		stck <- rbind(stck,stck,stck)
 		stck[[z]]  <- c(cdat[[z]], cdat[[z.upr]], cdat[[z.lwr]])
-		stck[[colname.type]] <- rep(c(z, z.upr, z.lwr), each=nrow(cdat))
+		stck[[colname.type]] <- rep(c(z, z.upr, z.lwr),
+					    each=nrow(cdat))
 		lvls <- c(z.lwr, z, z.upr)
 		lbls <- c('+1se','','-1se')
-		stck[[colname.type]] <- factor(stck[[colname.type]], levels=lvls, labels=lbls)
+		stck[[colname.type]] <- factor(stck[[colname.type]],
+					       levels=lvls, labels=lbls)
 	} else {
 		stck[[z]]  <- c(cdat[[z]])
 		stck[[colname.type]] <- rep(c(z), each=nrow(cdat))
@@ -122,17 +128,20 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 		plt <- plt + scale_colour_manual(values=cls)
 		plt <- plt + scale_linetype_manual(
 					values=c('dashed','solid','dotted'))
-		plt <- plt + scale_size_manual(values=c(0.5,0.5,1.0))
+		lsz <- c(rep(contour.line.size,2), contour.line.size*2)
+		plt <- plt + scale_size_manual(values=lsz)
 	} else {
 		plt <- plt + scale_colour_manual(values=c('#000000'))
 		plt <- plt + scale_linetype_manual(values=c('solid'))
-		plt <- plt + scale_size_manual(values=c(0.5))
+		plt <- plt + scale_size_manual(values=contour.line.size)
 	}
-	plt <- plt + metR::geom_text_contour(data=cdat,
-					     aes(fontface='bold'),
-					     stroke=0.1,
-					     breaks=line.breaks,
-					     skip=0)
+	if (contour.labels) {
+		plt <- plt + metR::geom_text_contour(data=cdat,
+						     aes(fontface='bold'),
+						     stroke=0.1,
+						     breaks=line.breaks,
+						     skip=0)
+	}
 	mycls <- brewer.pal(11, 'Spectral') 
 	mycls <- rev(colorRampPalette(mycls)(length(color.breaks)))
 	if (is.null(zlim)) {
