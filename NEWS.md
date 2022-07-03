@@ -1,3 +1,7 @@
+# gamutil 0.5.6
+
+1. Extended the two new arguments of ndat_to_contour to plot_contour, i.e., contour.labels and contour.line.size.
+
 # gamutil 0.5.5
 
 1. Added two new arguments to ndat_to_contour. One of them is contour.labels. The argument takes a logical value. With TRUE, numeric values of contour labels are drawn. The other new argument is contour.line.size. The argument controls thickness of contour lines.

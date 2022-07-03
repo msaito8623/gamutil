@@ -17,7 +17,9 @@ ndat_to_contour(
   break.interval = NULL,
   line.breaks = NULL,
   color.breaks = NULL,
-  zlim = NULL
+  zlim = NULL,
+  contour.labels = TRUE,
+  contour.line.size = 0.5
 )
 }
 \arguments{
@@ -57,6 +59,11 @@ contour line. This argument is not used if "line.breaks" and
 
 \item{zlim}{A numeric vector with length 2, which indicates the range of the
 z-axis.}
+
+\item{contour.labels}{Logical. With TRUE (default), contour labels will be
+drawn.}
+
+\item{contour.line.size}{A numeric with its length 1. It controls thickness of contour lines. The default is 0.5.}
 }
 \value{
 A ggplot object of a contour plot with predicted values being colors

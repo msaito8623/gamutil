@@ -17,7 +17,9 @@ plot_contour(
   contour.color.breaks = NULL,
   zlim = NULL,
   facet.labeller = NULL,
-  verbose = FALSE
+  verbose = FALSE,
+  contour.labels = TRUE,
+  contour.line.size = 0.5
 )
 }
 \arguments{
@@ -64,11 +66,19 @@ one to another contour line. This argument is not used if
 \item{zlim}{A numeric vector with length of 2, which indicates the range of
 the z-axis.}
 
-\item{facet.labeller}{A named vector, whose names are old labels and whose values are new values. Facet labels are renamed according to this named vector.}
+\item{facet.labeller}{A named vector, whose names are old labels and whose
+values are new values. Facet labels are renamed according to this named
+vector.}
 
 \item{verbose}{Logical. With verbose=TRUE, terms selected for prediction
 were printed out and also some explanation will be provided when no term is
 matched.}
+
+\item{contour.labels}{Logical. With TRUE (default), contour labels will be
+drawn.}
+
+\item{contour.line.size}{A numeric with its length 1. It controls thickness
+of contour lines. The default is 0.5.}
 }
 \value{
 A ggplot object, which is a contour line plot with predicted values
