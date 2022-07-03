@@ -131,9 +131,12 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 		lsz <- c(rep(contour.line.size,2), contour.line.size*2)
 		plt <- plt + scale_size_manual(values=lsz)
 	} else {
-		plt <- plt + scale_colour_manual(values=c('#000000'))
-		plt <- plt + scale_linetype_manual(values=c('solid'))
-		plt <- plt + scale_size_manual(values=contour.line.size)
+		plt <- plt + scale_colour_manual(values=c('#000000'),
+						 guide='none')
+		plt <- plt + scale_linetype_manual(values=c('solid'),
+						   guide='none')
+		plt <- plt + scale_size_manual(values=contour.line.size,
+					       guide='none')
 	}
 	if (contour.labels) {
 		plt <- plt + metR::geom_text_contour(data=cdat,
@@ -150,9 +153,11 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 		plt <- plt + scale_fill_gradientn(name=NULL,
 						  limits=zlim, colours=mycls)
 	}
-	plt <- plt + guides(colour=guide_legend(order=1),
-			    size=guide_legend(order=1),
-			    linetype=guide_legend(order=1))
+	if (se) {
+		plt <- plt + guides(colour=guide_legend(order=1),
+				    size=guide_legend(order=1),
+				    linetype=guide_legend(order=1))
+	}
 	plt <- plt + theme(legend.title=element_blank())
 	if (!is.null(facet.col)) {
 		if (!is.factor(ndat[[facet.col]])) {

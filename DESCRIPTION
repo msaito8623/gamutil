@@ -1,6 +1,6 @@
 Package: gamutil
 Title: Handy Functions to Work with Generalized Additive (Mixed-Effect) Models
-Version: 0.5.6
+Version: 0.5.7
 Authors@R: 
     person(given = "Motoki",
            family = "Saito",

@@ -1,3 +1,7 @@
+# gamutil 0.5.7
+
+1. Removed the legend for the contour lines when se=FALSE.
+
 # gamutil 0.5.6
 
 1. Extended the two new arguments of ndat_to_contour to plot_contour, i.e., contour.labels and contour.line.size.
