@@ -1,13 +1,13 @@
 Package: gamutil
-Title: Handy Functions to Work with Generalized Additive (Mixed-Effect) Models
-Version: 0.5.7
+Title: Utilities to Facilitate Modelling Routines with Generalized Additive Models
+Version: 0.5.8
 Authors@R: 
     person(given = "Motoki",
            family = "Saito",
            role = c("aut", "cre"),
            email = "motokisaito.8623@gmail.com",
            comment = c(ORCID = "0000-0003-0785-5813"))
-Description: Fitting a Generalized Additive (Mixed) Model, the next step may be to obtain predicted values for certain combinations of predictors for visualization. It involves constructing a new data.frame, add predicted values, and finally makes a plot. Each of the steps, especially visualization of predicted values with a contour plot, takes lines of coding and time, too. This package is intended to facilitate this process.
+Description: After fitting a Generalized Additive (Mixed) Model, the next step is often to obtain predicted values for certain combinations of predictors for visualization of estimated effects in the model. It involves constructing a new dataframe, add predicted values, and finally makes a (contour) plot. This package is intended to facilitate these steps to visualize estimated effects in a GAM.
 Imports:
     ggplot2,
     metR,

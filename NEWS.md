@@ -1,3 +1,8 @@
+# gamutil 0.5.8
+
+1. Minor updates in DESCRIPTION.
+2. Update the vignettes
+
 # gamutil 0.5.7
 
 1. Removed the legend for the contour lines when se=FALSE.
