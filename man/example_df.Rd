@@ -25,10 +25,12 @@ and the dataframe to be produced are intended for internal use to describe
 examples in documentations.
 }
 \examples{
+\dontrun{
 library(mgcv)
 dat = example_df(n=400)
 mdl <- gam(y ~ s(x1) + s(x2) + ti(x1, x2), data=dat)
 plot_contour(mdl, view=c('x1','x2'))
+}
 }
 \author{
 Motoki Saito, \email{motoki.saito@uni-tuebingen.de}

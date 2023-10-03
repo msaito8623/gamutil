@@ -15,10 +15,12 @@
 #' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
 #' @keywords utilities
 #' @examples
+#' \dontrun{
 #' library(mgcv)
 #' dat = example_df(n=400)
 #' mdl <- gam(y ~ s(x1) + s(x2) + ti(x1, x2), data=dat)
 #' plot_contour(mdl, view=c('x1','x2'))
+#' }
 #' @importFrom stats runif rnorm
 #' @export
 #'
