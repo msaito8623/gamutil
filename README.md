@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/msaito8623/gamutil/workflows/R-CMD-check/badge.svg)](https://github.com/msaito8623/gamutil/actions)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of gamutil is to provide some short-cut functions to facilitate
@@ -33,7 +35,7 @@ GA(M)M model with a contour plot:
 library(gamutil)
 library(mgcv)
 #> Loading required package: nlme
-#> This is mgcv 1.8-34. For overview type 'help("mgcv-package")'.
+#> This is mgcv 1.9-0. For overview type 'help("mgcv-package")'.
 set.seed(8361)
 dat = gamSim(verbose=FALSE)
 mdl = gam(y ~ s(x0) + s(x1) + ti(x0,x1), data=dat)
@@ -59,8 +61,7 @@ print(plt)
 -----
 
 The interval between contour lines can be adjusted by the
-“break.interval”
-argument.
+“break.interval” argument.
 
 ``` r
 plt = plot_contour(mdl, view=c('x0','x1'), axis.len=100, break.interval=1.5)
@@ -95,12 +96,14 @@ example, the sum of the partial effects of s(x0), s(x1), and ti(x0,x1)
 may be of interest, but you would like to exclude s(x2). This choice of
 terms can be achieved by terms.size=“medium”, with which the terms that
 contain at least one of the variables specified by “view” and “cond”,
-excluding other
-variables.
+excluding other variables.
 
 ``` r
 plt = plot_contour(mdl, view=c('x0','x1'), summed=FALSE, axis.len=100, terms.size="medium", verbose=TRUE)
-#> Selected: s(x0), s(x1), ti(x0,x1)
+#> Selected:
+#> s(x0)
+#> s(x1)
+#> ti(x0,x1)
 print(plt)
 ```
 
@@ -150,24 +153,25 @@ in the example above, the function does not know which level of the
 factor variable “fac” to use without “cond”.
 
 Telling the function which level of the factor variable to use through
-“cond”, the function draws a contour plot for that factor
-level.
+“cond”, the function draws a contour plot for that factor level.
 
 ``` r
 plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac='1'), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
-#> Selected: ti(x0,x1):fac1
+#> Selected:
+#> ti(x0,x1):fac1
 print(plt)
 ```
 
 <img src="man/figures/README-ex6-1.png" width="600px" height="500px" />
 
 Multiple factor levels can be drawn in separate panels by giving “cond”
-a vector of the pertinent factor
-levels:
+a vector of the pertinent factor levels:
 
 ``` r
 plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac=c('1','4')), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
-#> Selected: ti(x0,x1):fac1, ti(x0,x1):fac4
+#> Selected:
+#> ti(x0,x1):fac1
+#> ti(x0,x1):fac4
 print(plt)
 ```
 
@@ -182,7 +186,9 @@ ggplot2::ggplot.
 ``` r
 library(ggplot2)
 plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac=c('1','4')), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
-#> Selected: ti(x0,x1):fac1, ti(x0,x1):fac4
+#> Selected:
+#> ti(x0,x1):fac1
+#> ti(x0,x1):fac4
 plt = plt + xlab('Variable "x0"')
 plt = plt + ylab('Variable "x1"')
 plt = plt + labs(title='Partial effect of ti(x0,x1):fac1')

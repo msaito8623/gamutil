@@ -19,7 +19,9 @@
 #' upper confidence interval boundary.
 #' @param facet.col A character of length 1. Split plots will be drawn for the
 #' column with the name specified by this argument.
-#' @param facet.labeller A named vector, whose names are old labels and whose labels are corresponding new labels. This named vector is used to rename names of facets.
+#' @param facet.labeller A named vector, whose names are old labels and whose
+#' labels are corresponding new labels. This named vector is used to rename
+#' names of facets.
 #' @param se Logical to indicate whether contour lines should be drawn for 1 x
 #' standard error.
 #' @param break.interval A numeric, indicating the interval from one to another
@@ -31,7 +33,8 @@
 #' z-axis.
 #' @param contour.labels Logical. With TRUE (default), contour labels will be
 #' drawn.
-#' @param contour.line.size A numeric with its length 1. It controls thickness of contour lines. The default is 0.5.
+#' @param contour.line.size A numeric with its length 1. It controls thickness
+#' of contour lines. The default is 0.5.
 #' @return A ggplot object of a contour plot with predicted values being colors
 #' (z-axis).
 #' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
@@ -52,9 +55,10 @@
 #'                        z.upr='upr', facet.col='fac', se=TRUE)
 #' print(plt)
 #' }
-#' @importFrom ggplot2 ggplot aes aes_string stat_contour scale_fill_gradientn
+#' @importFrom ggplot2 ggplot aes stat_contour scale_fill_gradientn
 #' guides guide_legend theme element_blank scale_colour_manual
-#' scale_linetype_manual scale_size_manual layer_scales facet_wrap
+#' scale_linetype_manual scale_size_manual scale_linewidth_manual layer_scales
+#' facet_wrap .data
 #' @importFrom metR geom_contour_fill
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom grDevices colorRampPalette
@@ -114,14 +118,15 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 		stck[[colname.type]] <- factor(stck[[colname.type]])
 	}
 
-	plt <- ggplot(mapping=aes_string(x=x, y=y, z=z))
+	plt <- ggplot(mapping=aes(x=.data[[x]], y=.data[[y]], z=.data[[z]]))
 	plt <- plt + metR::geom_contour_fill(data=cdat, mapping=aes(),
 					     breaks=color.breaks)
 	plt <- plt + stat_contour(data=stck,
-				  mapping=aes_string(linetype=colname.type,
-						     colour=colname.type,
-						     size=colname.type),
+				  mapping=aes(linetype=.data[[colname.type]],
+					      colour=.data[[colname.type]],
+					      linewidth=.data[[colname.type]]),
 				  breaks=line.breaks)
+	plt <- plt + scale_linewidth_manual(values=c(0.5,0.5,1.0))
 	if (se) {
 		cls <- brewer.pal(3,'Dark2')[1:2]
 		cls <- c(cls[2], '#000000',cls[1])
@@ -155,7 +160,7 @@ ndat_to_contour  <- function (ndat, x, y, z, z.lwr='lwr', z.upr='upr',
 	}
 	if (se) {
 		plt <- plt + guides(colour=guide_legend(order=1),
-				    size=guide_legend(order=1),
+				    linewidth=guide_legend(order=1),
 				    linetype=guide_legend(order=1))
 	}
 	plt <- plt + theme(legend.title=element_blank())

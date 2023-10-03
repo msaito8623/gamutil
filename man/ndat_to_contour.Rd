@@ -44,7 +44,9 @@ upper confidence interval boundary.}
 \item{facet.col}{A character of length 1. Split plots will be drawn for the
 column with the name specified by this argument.}
 
-\item{facet.labeller}{A named vector, whose names are old labels and whose labels are corresponding new labels. This named vector is used to rename names of facets.}
+\item{facet.labeller}{A named vector, whose names are old labels and whose
+labels are corresponding new labels. This named vector is used to rename
+names of facets.}
 
 \item{se}{Logical to indicate whether contour lines should be drawn for 1 x
 standard error.}
@@ -63,7 +65,8 @@ z-axis.}
 \item{contour.labels}{Logical. With TRUE (default), contour labels will be
 drawn.}
 
-\item{contour.line.size}{A numeric with its length 1. It controls thickness of contour lines. The default is 0.5.}
+\item{contour.line.size}{A numeric with its length 1. It controls thickness
+of contour lines. The default is 0.5.}
 }
 \value{
 A ggplot object of a contour plot with predicted values being colors

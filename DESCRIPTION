@@ -7,9 +7,10 @@ Authors@R:
            role = c("aut", "cre"),
            email = "motokisaito.8623@gmail.com",
            comment = c(ORCID = "0000-0003-0785-5813"))
-Description: After fitting a Generalized Additive (Mixed) Model, the next step is often to obtain predicted values for certain combinations of predictors for visualization of estimated effects in the model. It involves constructing a new dataframe, add predicted values, and finally makes a (contour) plot. This package is intended to facilitate these steps to visualize estimated effects in a GAM.
+Description: After fitting a Generalized Additive (Mixed) Model, the next step is often to obtain predicted values for certain combinations of predictors for visualization of estimated effects in the model. It involves constructing a new data frame, add predicted values, and finally makes a (contour) plot. This package is intended to facilitate these steps to visualize estimated effects in a GAM.
 Imports:
     ggplot2,
+    lifecycle,
     metR,
     mgcv,
     RColorBrewer
@@ -20,7 +21,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0),
     knitr,

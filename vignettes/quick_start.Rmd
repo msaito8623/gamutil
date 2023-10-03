@@ -20,35 +20,45 @@ library(gamutil)
 ```
 
 ```{r, include=FALSE}
-n = 1000
+n <- 1000
 set.seed(123)
-x0 = runif(n, -1, 1)
+x0 <- runif(n, -1, 1)
 set.seed(1234)
-x1 = runif(n, -1, 1)
+x1 <- runif(n, -1, 1)
 set.seed(12345)
-x2 = runif(n, -1, 1)
+x2 <- runif(n, -1, 1)
 set.seed(123456)
-e = rnorm(n, 0, 1)
-f = function (x, a, b, d, g) a*x^3 + b*x^2 + d*x^1 + g
-f0 = 0.1 * f(x0, 0.02,  0.01, -0.01,  0.00)
-f1 = 0.1 * f(x1, 0.02,  0.00, -0.02,  0.02)
-f2 = 0.1 * f(x2, 0.01, -0.01,  0.03, -0.03)
-f3 = 0.5 * f(x0, 0.02,  0.00, -0.04,  0.04) * f(x1,  0.20,  0.00,  0.50, -0.05)
-f4 = 1 * f(x0, 0.02,  0.10,  0.01,  0.02) * f(x2,  0.20,  0.10, -0.60,  0.06)
-f5 = 5 * f(x1, 1.20, -0.25,  -0.01,  0.20) * f(x2,  0.60, -0.25, -0.10,  0.06)
-f6 = 10 * f(x0, 0.10,  0.20,  0.25,  0.20) * f(x1, -1.20,  0.03,  0.10,  1.20) * f(x2, 0.50, 0.40, -0.20, 0.60)
-y = f0 + f1 + f2 + f3 + f4 + f5 + f6 + e
+e <- rnorm(n, 0, 1)
+f <- function (x, a, b, d, g) a*x^3 + b*x^2 + d*x^1 + g
+f0 <-  0.1 * f(x0,  0.02,  0.01, -0.01,  0.00)
+f1 <-  0.1 * f(x1,  0.02,  0.00, -0.02,  0.02)
+f2 <-  0.1 * f(x2,  0.01, -0.01,  0.03, -0.03)
+f3 <-  0.5 * f(x0,  0.02,  0.00, -0.04,  0.04) *
+	     f(x1,  0.20,  0.00,  0.50, -0.05)
+f4 <-  1.0 * f(x0,  0.02,  0.10,  0.01,  0.02) *
+	     f(x2,  0.20,  0.10, -0.60,  0.06)
+f5 <-  5.0 * f(x1,  1.20, -0.25, -0.01,  0.20) *
+	     f(x2,  0.60, -0.25, -0.10,  0.06)
+f6 <- 10.0 * f(x0,  0.10,  0.20,  0.25,  0.20) *
+	     f(x1, -1.20,  0.03,  0.10,  1.20) *
+	     f(x2,  0.50,  0.40, -0.20,  0.60)
+y <- f0 + f1 + f2 + f3 + f4 + f5 + f6 + e
 ```
 
-This package facilitates daily modeling routines with GA(M)Ms by the mgcv package (Wood, 2017). Suppose you already fitted a GAM below, using mgcv::gam or mgcv::bam:
+This package facilitates daily modeling routines with GA(M)Ms by the mgcv
+package (Wood, 2017). Suppose you already fitted a GAM below, using mgcv::gam
+or mgcv::bam:
 
 ```{r}
 library(mgcv)
-mdl = gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0, x1) + ti(x0, x2) + ti(x1, x2) + ti(x0, x1, x2))
+mdl <- gam(y ~ s(x0) + s(x1) + s(x2) +
+	       ti(x0, x1) + ti(x0, x2) + ti(x1, x2) +
+	       ti(x0, x1, x2))
 ```
 
 ## Summed effects
-Summed-effects can be visualized by mgcv::vis.gam, or itsadug::fvisgam (van Rij, 2020). The same plot can also be plotted by mgcv::plot_contour as below:
+Summed-effects can be visualized by mgcv::vis.gam, or itsadug::fvisgam (van
+Rij, 2020). The same plot can also be plotted by mgcv::plot_contour as below:
 
 ```{r, fig.dim=c(5,5)}
 vis.gam(mdl, view=c('x1','x2'), plot.type='contour')
@@ -58,53 +68,75 @@ vis.gam(mdl, view=c('x1','x2'), plot.type='contour')
 plot_contour(mdl, view=c('x1','x2'))
 ```
 
-There is no correct way in choosing the number of contour lines and their cvalues. In gamutil::plot_contour, you can use user-defined contour lines by the optional arguments "contour.line.breaks" and "contour.color.breaks" for contour lines and contour colors respectively:
+There is no correct way in choosing the number of contour lines and their
+cvalues. In gamutil::plot_contour, you can use user-defined contour lines by
+the optional arguments "contour.line.breaks" and "contour.color.breaks" for
+contour lines and contour colors respectively:
 
 ```{r, fig.dim=c(6,5)}
-lbr = seq(-10, 10, by=1.0)
-cbr = seq(-10, 10, by=0.1)
-plot_contour(mdl, view=c('x1','x2'), contour.line.breaks=lbr, contour.color.breaks=cbr)
+lbr <- seq(-10, 10, by=1.0)
+cbr <- seq(-10, 10, by=0.1)
+plot_contour(mdl, view=c('x1','x2'),
+	     contour.line.breaks=lbr, contour.color.breaks=cbr)
 ```
 
 
 ## Partial effects
-Partial effects can be visualized by mgcv::plot.gam or itsadug::pvisgam. The same plot can be obtained with gamutil::plot_contour as below:
+Partial effects can be visualized by mgcv::plot.gam or itsadug::pvisgam. The
+same plot can be obtained with gamutil::plot_contour as below:
 
 ```{r, fig.dim=c(6,5)}
 plot.gam(mdl, select=6)
 ```
 
 ```{r, fig.dim=c(6,5)}
-lbr = seq(-5, 5, by=0.50)
-cbr = seq(-5, 5, by=0.05)
-plot_contour(mdl, view=c('x1','x2'), summed=FALSE, terms.size='min', verbose=TRUE, contour.line.breaks=lbr, contour.color.breaks=cbr)
+lbr <- seq(-5, 5, by=0.50)
+cbr <- seq(-5, 5, by=0.05)
+plot_contour(mdl, view=c('x1','x2'), summed=FALSE, terms.size='min',
+	     verbose=TRUE, contour.line.breaks=lbr, contour.color.breaks=cbr)
 ```
 
-The optional argument "terms.size='min'" ensures that you include only the term that contains the variables specified in "view", namely "x1" and "x2" in this example.
+The optional argument "terms.size='min'" ensures that you include only the term
+that contains the variables specified in "view", namely "x1" and "x2" in this
+example.
 
 
 ## Partially-summed effects
 
-The argument "terms.size" can take three values. They are "min", "medium", and "max". "min" is intended to plot only one term, i.e., partial effects. "medium" includes all the terms that contain the variables specified in "view" but no other variables. In the current example, it would include "s(x1)", "s(x2)", and "ti(x1,x2)". Note that "ti(x0, x1)", "ti(x0,x2)", and ti(x0, x1, x2) are excluded, although they contain one of the variables in "view". They are excluded because they also contain the variables that are not specified in "view".
+The argument "terms.size" can take three values. They are "min", "medium", and
+"max". "min" is intended to plot only one term, i.e., partial effects. "medium"
+includes all the terms that contain the variables specified in "view" but no
+other variables. In the current example, it would include "s(x1)", "s(x2)", and
+"ti(x1,x2)". Note that "ti(x0, x1)", "ti(x0,x2)", and ti(x0, x1, x2) are
+excluded, although they contain one of the variables in "view". They are
+excluded because they also contain the variables that are not specified in
+"view".
 
 ```{r, fig.dim=c(6,5)}
-plot_contour(mdl, view=c('x1','x2'), summed = FALSE, terms.size = 'medium', verbose = TRUE)
+plot_contour(mdl, view=c('x1','x2'), summed=FALSE, terms.size='medium',
+	     verbose=TRUE)
 ```
 
-In contrast, "terms.size='max'" plots all the terms that include at least one of the variables specified in the "view" argument. In the current example, it would include "s(x1)", "s(x2)", "ti(x0,x1)", "ti(x0,x2)", "ti(x1,x2)", and "ti(x0,x1,x2)".
+In contrast, "terms.size='max'" plots all the terms that include at least one
+of the variables specified in the "view" argument. In the current example, it
+would include "s(x1)", "s(x2)", "ti(x0,x1)", "ti(x0,x2)", "ti(x1,x2)", and
+"ti(x0,x1,x2)".
 
 ```{r, fig.dim=c(6,5)}
-plot_contour(mdl, view=c('x1','x2'), summed = FALSE, terms.size = 'max', verbose = TRUE)
+plot_contour(mdl, view=c('x1','x2'), summed=FALSE, terms.size='max',
+	     verbose=TRUE)
 ```
 
 
 ## Notes
 
-The return value of gamutil::plot_contour is a ggplot object. Therefore, you can modify the plot afterwards.
+The return value of gamutil::plot_contour is a ggplot object. Therefore, you
+can modify the plot afterwards.
 
 ```{r, fig.dim=c(6,5)}
 library(ggplot2)
-plt = plot_contour(mdl, view=c('x1','x2'), summed = FALSE, terms.size = 'medium', verbose = TRUE)
-plt = plt + theme(text=element_text(size=25))
+plt <- plot_contour(mdl, view=c('x1','x2'), summed=FALSE, terms.size='medium',
+		    verbose=TRUE)
+plt <- plt + theme(text=element_text(size=25))
 plt
 ```
