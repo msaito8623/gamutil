@@ -1,4 +1,4 @@
-# gamutil (development version)
+# gamutil 0.6.0
 
 * Vignettes are updated.
 * gamutil::example_df is added to simplify examples in README.Rmd and vignettes.
