@@ -4,7 +4,7 @@
 \name{gamutil-package}
 \alias{gamutil}
 \alias{gamutil-package}
-\title{gamutil: Utilities to Facilitate Modelling Routines with Generalized Additive Models}
+\title{gamutil: Utilities to Facilitate Modeling Routines with Generalized Additive Models}
 \description{
 After fitting a Generalized Additive (Mixed) Model, the next step is often to obtain predicted values for certain combinations of predictors for visualization of estimated effects in the model. It involves constructing a new data frame, add predicted values, and finally makes a (contour) plot. This package is intended to facilitate these steps to visualize estimated effects in a GAM.
 }

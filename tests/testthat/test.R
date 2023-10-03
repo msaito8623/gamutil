@@ -651,3 +651,8 @@ test_that('ndat_to_contour handles the argument facet.labeller properly.', {
 	expect_mapequal(bld$layout$facet_params$plot_env$facet.labeller,
 			c('1'='One','4'='Four'))
 })
+test_that('example_df produces a certain dataframe.', {
+	dat <- example_df()
+	expect_equal(nrow(dat), 1000)
+	expect_true(all(colnames(dat)==c('y','x0','x1','x2')))
+})

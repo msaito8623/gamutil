@@ -1,6 +1,6 @@
 Package: gamutil
-Title: Utilities to Facilitate Modelling Routines with Generalized Additive Models
-Version: 0.5.8
+Title: Utilities to Facilitate Modeling Routines with Generalized Additive Models
+Version: 0.6.0
 Authors@R: 
     person(given = "Motoki",
            family = "Saito",

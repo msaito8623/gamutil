@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 library(gamutil)
 ```
 
+<!--
 ```{r, include=FALSE}
 n <- 1000
 set.seed(123)
@@ -44,6 +45,7 @@ f6 <- 10.0 * f(x0,  0.10,  0.20,  0.25,  0.20) *
 	     f(x2,  0.50,  0.40, -0.20,  0.60)
 y <- f0 + f1 + f2 + f3 + f4 + f5 + f6 + e
 ```
+-->
 
 This package facilitates daily modeling routines with GA(M)Ms by the mgcv
 package (Wood, 2017). Suppose you already fitted a GAM below, using mgcv::gam
@@ -51,9 +53,10 @@ or mgcv::bam:
 
 ```{r}
 library(mgcv)
+dat <- gamutil::example_df()
 mdl <- gam(y ~ s(x0) + s(x1) + s(x2) +
 	       ti(x0, x1) + ti(x0, x2) + ti(x1, x2) +
-	       ti(x0, x1, x2))
+	       ti(x0, x1, x2), data=dat)
 ```
 
 ## Summed effects
@@ -69,7 +72,7 @@ plot_contour(mdl, view=c('x1','x2'))
 ```
 
 There is no correct way in choosing the number of contour lines and their
-cvalues. In gamutil::plot_contour, you can use user-defined contour lines by
+values. In gamutil::plot_contour, you can use user-defined contour lines by
 the optional arguments "contour.line.breaks" and "contour.color.breaks" for
 contour lines and contour colors respectively:
 

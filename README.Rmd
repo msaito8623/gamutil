@@ -18,112 +18,122 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/msaito8623/gamutil/workflows/R-CMD-check/badge.svg)](https://github.com/msaito8623/gamutil/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test coverage](https://codecov.io/gh/msaito8623/gamutil/branch/master/graph/badge.svg)](https://app.codecov.io/gh/msaito8623/gamutil?branch=master)
+[![R-CMD-check](https://github.com/msaito8623/gamutil/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/msaito8623/gamutil/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of gamutil is to provide some short-cut functions to facilitate to work with mgcv::gam and mgcv::bam.
+This package "gamutil" provides some short-cut functions to facilitate to work with mgcv::gam and mgcv::bam.
+
+
 
 ## Installation
 
-gamutil is still under development and therefore not available on [CRAN](https://CRAN.R-project.org). 
-
-The development version is available from [GitHub](https://github.com/) with:
+You can install the development version of gamutil from [GitHub](https://github.com/):
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("msaito8623/gamutil")
 ```
 
+
+---
+
 ## Examples
 
-This is a basic example which shows you how to visualize prediction by a GA(M)M model with a contour plot:
 
-```{r, ex1, fig.dim=c(6,6), out.width="600px", out.height="500px"}
+### Contour plots from GAM 
+
+In the current version, the main function of gamutil is gamutil::plot_contour. The function takes a mgcv::gam object and returns a ggplot object, automating the whole process of making a new data frame, calculating the model's predictions, and constructing a contour plot using ggplot.
+
+```{r, ex1, fig.dim=c(5,5), out.width="600px", out.height="500px"}
 library(gamutil)
 library(mgcv)
-set.seed(8361)
-dat = gamSim(verbose=FALSE)
-mdl = gam(y ~ s(x0) + s(x1) + ti(x0,x1), data=dat)
-plt = plot_contour(mdl, view=c('x0','x1'))
+dat <- gamutil::example_df()
+mdl <- gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0, x1) + ti(x0, x2) + ti(x1, x2) + ti(x0, x1, x2), data=dat)
+plt <- plot_contour(mdl, view=c('x1','x2'))
 print(plt)
 ```
 
+But there are already several functions available for similar purposes. For example, there are mgcv::vis.gam and itsadug::fvisgam for visualizing summed effects. For partial effects, mgcv::plot.gam and itsadug::pvisgam can be used. There are intermediate cases between summed effects and partial effects, which I would call "partially-summed effects". Partially summed effects refer to the sum of the effects by only several partial effects.
+
+For example, suppose we are interested in the effects of "x1" and "x2". There are several terms containing "x1" and "x2" in the current model (fitted above). If we visualize summed effects, all the terms would be included, including those without "x1" or "x2", for example "s(x)". In contrast, if we choose to visualize partial effects, we have to choose one of the terms that contain "x1" and/or "x2". How can we specify the sum of the partial effects of "s(x1)", "s(x2)", and "ti(x1,x2)"? It can be achieved by gamutil::plot_contour:
+
+```{r, ex1a, fig.dim=c(5,5), out.width="600px", out.height="500px"}
+plt <- plot_contour(mdl, view=c('x1','x2'), summed=FALSE, terms.size='medium', verbose=TRUE)
+print(plt)
+```
+
+With "terms.size='medium'", all the terms that contain the variables specified in "view" but not any other variable would be included. But, how about "ti(x0,x1)", "ti(x0,x2)", and "ti(x0,x1,x2)"? They do contain uninterested variables (i.e., "x0"). But, they also include the variables of interest. To include all the terms that contain at least one variable of interest specified in "view", you only need to set "terms.size='max'":
+
+```{r, ex1b, fig.dim=c(5,5), out.width="600px", out.height="500px"}
+plt <- plot_contour(mdl, view=c('x1','x2'), summed=FALSE, terms.size='max', verbose=TRUE)
+print(plt)
+```
+
+The other possible value for "terms.size" is "min", which would plot a partial-effect plot:
+
+```{r, ex1c, fig.dim=c(5,5), out.width="600px", out.height="500px"}
+plt <- plot_contour(mdl, view=c('x1','x2'), summed=FALSE, terms.size='min', verbose=TRUE)
+print(plt)
+```
+
+If you need a summed-effect plot, you can set "summed=TRUE":
+
+```{r, ex1d, fig.dim=c(5,5), out.width="600px", out.height="500px"}
+plt <- plot_contour(mdl, view=c('x1','x2'), summed=TRUE, verbose=TRUE)
+print(plt)
+```
+
+
 ---
+
+### Customizing a contour plot
 
 The argument "axis.len" controls resolution of the contour plot to be produced (default=50). Bigger numbers for the argument would draw smoother contour lines.
 
-```{r, ex2, fig.dim=c(6,6), out.width="600px", out.height="500px"}
-plt = plot_contour(mdl, view=c('x0','x1'), axis.len=10)
+```{r, ex2, fig.dim=c(5,5), out.width="600px", out.height="500px"}
+plt <- plot_contour(mdl, view=c('x1','x2'), axis.len=10)
 print(plt)
 ```
-
----
 
 The interval between contour lines can be adjusted by the "break.interval" argument.
 
-```{r, ex3, fig.dim=c(6,6), out.width="600px", out.height="500px"}
-plt = plot_contour(mdl, view=c('x0','x1'), axis.len=100, break.interval=1.5)
+```{r, ex3, fig.dim=c(5,5), out.width="600px", out.height="500px"}
+plt <- plot_contour(mdl, view=c('x1','x2'), axis.len=100, break.interval=1.5)
 print(plt)
+```
+
+The return value of gamutil::plot_contour is a ggplot object. Therefore, it can be modified in the same way as you would do for ggplot objects in general. For example, you can change font sizes and a plot title as below:
+
+```{r, ex4, fig.dim=c(5,5), out.width="600px", out.height="500px"}
+library(ggplot2)
+plt <- plot_contour(mdl, view=c('x1','x2'), verbose=TRUE)
+plt <- plt + theme(text=element_text(size=25))
+plt <- plt + labs(title='Summed effects')
+plt
 ```
 
 ---
 
-In default, the summed effect is drawn (as the figures above). For partial effects, summed=FALSE.
+### Faceting contour plots
 
-```{r, ex4, fig.dim=c(6,6), out.width="600px", out.height="500px"}
-plt = plot_contour(mdl, view=c('x0','x1'), summed=FALSE, axis.len=100)
+If you have a by-variable in some terms in a model, you can produce contour plots separately for each level of the by-variable.
+
+```{r, ex5, fig.dim=c(12,6), out.width="1000px", out.height="500px"}
+set.seed(1234)
+dat$fac <- factor(sample(c("A","B"), size=nrow(dat), replace=TRUE))
+mdl <- gam(y ~ s(x1, by=fac) + s(x2, by=fac) + ti(x1, x2, by=fac), data=dat)
+plt <- plot_contour(mdl, view=c('x1','x2'), cond=list(fac=c("A","B")))
 print(plt)
 ```
 
----
-
-Which terms are selected for the plot? In default, the term that has no more or less than the variables included in "view". In this example, the term to selected is ti(x0,x1). Which terms to be included can be controlled by "terms.size". The argument takes "min", "medium", or "max", and its default value is "min". Since it selects only one term, it corresponds to mgcv::plot.gam or itsadug::pvisgam.
-
-Sometimes, not only one term but several terms can be of interest. For example, the sum of the partial effects of s(x0), s(x1), and ti(x0,x1) may be of interest, but you would like to exclude s(x2). This choice of terms can be achieved by terms.size="medium", with which the terms that contain at least one of the variables specified by "view" and "cond", excluding other variables.
-
-```{r, ex5, fig.dim=c(6,6), out.width="600px", out.height="500px"}
-plt = plot_contour(mdl, view=c('x0','x1'), summed=FALSE, axis.len=100, terms.size="medium", verbose=TRUE)
-print(plt)
-```
-
----
-
-Note that the "by"-variable, which can be specified by "cond", is also taken into consideration in search of pertinent terms.
+Make sure to always specify the level(s) of the by-variable if you have a by-variable in a model. This is because mgcv::gam would estimate separate smooths/surfaces for each level of a by-variable. In other words, there is no intermediate or average smooth or surface in such a case. As a consequence, if you don't specify any level of a by-variable, gamutil::plot_contour cannot know which level to plot and therefore produces an error:
 
 ```{r, error=TRUE}
-set.seed(4195)
-dat2 = gamSim(eg=6, verbose=FALSE)
-mdl2 = gam(y ~ s(x0, by=fac) + s(x1, by=fac) + ti(x0,x1, by=fac), data=dat2)
-plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
+plt <- plot_contour(mdl, view=c('x1','x2'), cond=list())
 ```
 
-The example above gives an error, complaining there is no term matched. This is because the function looked for the term that only contains "x0" and "x1" and not other. But all the terms have "by=fac". In other words, in the example above, the function does not know which level of the factor variable "fac" to use without "cond".
 
-Telling the function which level of the factor variable to use through "cond", the function draws a contour plot for that factor level.
-
-```{r, ex6, fig.dim=c(6,6), out.width="600px", out.height="500px"}
-plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac='1'), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
-print(plt)
-```
-
-Multiple factor levels can be drawn in separate panels by giving "cond" a vector of the pertinent factor levels:
-
-```{r, ex7, fig.dim=c(8,4), out.width="1200px", out.height="400px"}
-plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac=c('1','4')), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
-print(plt)
-```
-
----
-
-The produced plot is a ggplot object, which means you can modify the plot as you would usually do for a ggplot object created by ggplot2::ggplot.
-
-```{r, ex8, fig.dim=c(8,4), out.width="1200px", out.height="400px"}
-library(ggplot2)
-plt = plot_contour(mdl2, view=c('x0','x1'), cond=list(fac=c('1','4')), summed=FALSE, axis.len=100, terms.size="min", verbose=TRUE)
-plt = plt + xlab('Variable "x0"')
-plt = plt + ylab('Variable "x1"')
-plt = plt + labs(title='Partial effect of ti(x0,x1):fac1')
-print(plt)
-```
 
 ---
 
