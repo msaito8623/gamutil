@@ -1,7 +1,7 @@
 # add_fit, verbose, when no term is matched (terms.size=min).
 
     Code
-      expect_error(add_fit(ndat, tmdl, terms = tgt, cond = cnd, terms.size = "min",
+      expect_error(add_fit(ndat, tmdl0, terms = tgt, cond = cnd, terms.size = "min",
         ci.mult = 1, verbose = TRUE))
     Output
       
@@ -32,7 +32,7 @@
 # add_fit, verbose, when no term is matched (terms.size=medium).
 
     Code
-      expect_error(add_fit(ndat, tmdl, terms = tgt, cond = cnd, terms.size = "medium",
+      expect_error(add_fit(ndat, tmdl0, terms = tgt, cond = cnd, terms.size = "medium",
         ci.mult = 1, verbose = TRUE))
     Output
       
@@ -63,7 +63,7 @@
 # add_fit, verbose, when no term is matched (terms.size=max).
 
     Code
-      expect_error(add_fit(ndat, tmdl, terms = tgt, cond = cnd, terms.size = "max",
+      expect_error(add_fit(ndat, tmdl0, terms = tgt, cond = cnd, terms.size = "max",
         ci.mult = 1, verbose = TRUE))
     Output
       
