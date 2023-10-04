@@ -1,29 +1,79 @@
 plt0  <- plot_contour(tmdl0, view=c('x0','x1'))
-plt1  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(),                          TRUE, terms.size='min')
-plt2  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(),                          TRUE, terms.size='medium')
-plt3  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(),                          TRUE, terms.size='max')
-plt4  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1'),                   TRUE, terms.size='min')
-plt5  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1'),                   TRUE, terms.size='medium')
-plt6  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1'),                   TRUE, terms.size='max')
-plt7  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4')),            TRUE, terms.size='min')
-plt8  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4')),            TRUE, terms.size='medium')
-plt9  <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4')),            TRUE, terms.size='max')
-plt10 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1',x2=x2max),          TRUE, terms.size='min')
-plt11 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1',x2=x2max),          TRUE, terms.size='medium')
-plt12 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1',x2=x2max),          TRUE, terms.size='max')
-plt13 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4'), x2=x2max),  TRUE, terms.size='min')
-plt14 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4'), x2=x2max),  TRUE, terms.size='medium')
-plt15 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4'), x2=x2max),  TRUE, terms.size='max')
-plt16 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1'),                  FALSE, terms.size='min')
-plt17 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1'),                  FALSE, terms.size='medium')
-plt18 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1'),                  FALSE, terms.size='max')
-plt19 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4')),           FALSE, terms.size='min')
-plt20 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4')),           FALSE, terms.size='medium')
-plt21 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4')),           FALSE, terms.size='max')
-plt22 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1',x2=x2max),         FALSE, terms.size='medium')
-plt23 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac='1',x2=x2max),         FALSE, terms.size='max')
-plt24 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4'),x2=x2max),  FALSE, terms.size='medium')
-plt25 <- plot_contour(tmdl0, view=c('x0','x1'), cond=list(fac=c('1','4'),x2=x2max),  FALSE, terms.size='max')
+plt1  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(),
+		      TRUE, terms.size='min')
+plt2  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(),
+		      TRUE, terms.size='medium')
+plt3  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(),
+		      TRUE, terms.size='max')
+plt4  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1'),
+		      TRUE, terms.size='min')
+plt5  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1'),
+		      TRUE, terms.size='medium')
+plt6  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1'),
+		      TRUE, terms.size='max')
+plt7  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4')),
+		      TRUE, terms.size='min')
+plt8  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4')),
+		      TRUE, terms.size='medium')
+plt9  <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4')),
+		      TRUE, terms.size='max')
+plt10 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1',x2=x2max),
+		      TRUE, terms.size='min')
+plt11 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1',x2=x2max),
+		      TRUE, terms.size='medium')
+plt12 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1',x2=x2max),
+		      TRUE, terms.size='max')
+plt13 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4'), x2=x2max),
+		      TRUE, terms.size='min')
+plt14 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4'), x2=x2max),
+		      TRUE, terms.size='medium')
+plt15 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4'), x2=x2max),
+		      TRUE, terms.size='max')
+plt16 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1'),
+		      FALSE, terms.size='min')
+plt17 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1'),
+		      FALSE, terms.size='medium')
+plt18 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1'),
+		      FALSE, terms.size='max')
+plt19 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4')),
+		      FALSE, terms.size='min')
+plt20 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4')),
+		      FALSE, terms.size='medium')
+plt21 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4')),
+		      FALSE, terms.size='max')
+plt22 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1',x2=x2max),
+		      FALSE, terms.size='medium')
+plt23 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac='1',x2=x2max),
+		      FALSE, terms.size='max')
+plt24 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4'),x2=x2max),
+		      FALSE, terms.size='medium')
+plt25 <- plot_contour(tmdl0, view=c('x0','x1'),
+		      cond=list(fac=c('1','4'),x2=x2max),
+		      FALSE, terms.size='max')
 
 test_that('plot_contour produces the same plot as plt1,plt2,plt3.', {
 	gtypes <- vapply(plt0$layers,
