@@ -14,12 +14,12 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 load('../R/sysdata.rda')
+RhpcBLASctl::blas_set_num_threads(1)
 ```
 
 ```{r setup}
 library(gamutil)
 ```
-
 This package facilitates daily modeling routines with GA(M)Ms by the mgcv
 package (Wood, 2017). Suppose you already fitted a GAM below, using mgcv::gam
 or mgcv::bam:

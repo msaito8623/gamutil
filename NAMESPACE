@@ -2,7 +2,6 @@
 
 export(add_fit)
 export(constant)
-export(example_df)
 export(mdl_to_ndat)
 export(ndat_to_contour)
 export(plot_contour)
@@ -29,5 +28,3 @@ importFrom(metR,geom_contour_fill)
 importFrom(mgcv,predict.gam)
 importFrom(stats,median)
 importFrom(stats,qnorm)
-importFrom(stats,rnorm)
-importFrom(stats,runif)

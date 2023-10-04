@@ -38,13 +38,21 @@ returns a ggplot object, automating the whole process of making a new
 data frame, calculating the model’s predictions, and constructing a
 contour plot using ggplot.
 
+Suppose you fitted the following model, using mgcv::gam:
+
 ``` r
-library(gamutil)
 library(mgcv)
 #> Loading required package: nlme
 #> This is mgcv 1.9-0. For overview type 'help("mgcv-package")'.
-dat <- gamutil::example_df()
-mdl <- gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0, x1) + ti(x0, x2) + ti(x1, x2) + ti(x0, x1, x2), data=dat)
+print(mdl$formula)
+#> y ~ s(x0) + s(x1) + s(x2) + ti(x0, x1) + ti(x0, x2) + ti(x1, 
+#>     x2) + ti(x0, x1, x2)
+```
+
+Then, you can visualize estimated effects of “x1” and “x2” as below:
+
+``` r
+library(gamutil)
 plt <- plot_contour(mdl, view=c('x1','x2'))
 print(plt)
 ```
@@ -172,10 +180,9 @@ If you have a by-variable in some terms in a model, you can produce
 contour plots separately for each level of the by-variable.
 
 ``` r
-set.seed(1234)
-dat$fac <- factor(sample(c("A","B"), size=nrow(dat), replace=TRUE))
-mdl <- gam(y ~ s(x1, by=fac) + s(x2, by=fac) + ti(x1, x2, by=fac), data=dat)
-plt <- plot_contour(mdl, view=c('x1','x2'), cond=list(fac=c("A","B")))
+print(mdl_fac$formula)
+#> y ~ s(x1, by = fac) + s(x2, by = fac) + ti(x1, x2, by = fac)
+plt <- plot_contour(mdl_fac, view=c('x1','x2'), cond=list(fac=c("A","B")))
 print(plt)
 ```
 
@@ -198,6 +205,7 @@ plt <- plot_contour(mdl, view=c('x1','x2'), cond=list())
 ## Acknowledgments
 
 Some functions in this package, especially gamutil::plot\_contour, are
-inspired by [mgcv::plot.gam](https://CRAN.R-project.org/package=mgcv),
+inspired by [mgcv::vis.gam](https://CRAN.R-project.org/package=mgcv),
+[mgcv::plot.gam](https://CRAN.R-project.org/package=mgcv),
 [itsadug::fvisgam](https://CRAN.R-project.org/package=itsadug), and
 [itsadug::pvisgam](https://CRAN.R-project.org/package=itsadug).
