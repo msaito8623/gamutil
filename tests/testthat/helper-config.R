@@ -2,6 +2,7 @@ library(testthat)
 library(ggplot2)
 library(mgcv)
 RhpcBLASctl::blas_set_num_threads(1)
+RhpcBLASctl::omp_set_num_threads(1)
 
 set.seed(534)
 invisible(capture.output(tdat <- mgcv::gamSim(eg=6,verbose=FALSE)))

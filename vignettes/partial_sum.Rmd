@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 )
 load('../R/sysdata.rda')
 RhpcBLASctl::blas_set_num_threads(1)
+RhpcBLASctl::omp_set_num_threads(1)
 ```
 
 ```{r setup}
