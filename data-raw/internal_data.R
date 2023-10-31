@@ -38,6 +38,23 @@ dat$fac <- factor(sample(c("A","B"), size=nrow(dat), replace=TRUE))
 mdl_fac <- gam(y ~ s(x1, by=fac) + s(x2, by=fac)
 	         + ti(x1, x2, by=fac), data=dat)
 
+### For testing ###
+set.seed(534)
+invisible(capture.output(tdat <- mgcv::gamSim(eg=6,verbose=FALSE)))
+tmdl0 <- mgcv::gam(y ~ s(x0, by=fac) + s(x1, by=fac, k=5)
+		     + s(x2) + ti(x0,x1,by=fac)
+		     + ti(x0,x2,by=fac), data=tdat)
+x2max <- max(tmdl0$model$x2)
+tmdl1 <- mgcv::gam(y ~ s(x0), data=tdat)
+tmdl2 <- mgcv::gam(y ~ s(x0, by=fac) + s(x1, by=fac, k=5)
+		     + ti(x0,x1), data=tdat)
+tdat3 <- tdat
+
+set.seed(432)
+tdat3$foo <- factor(sample(LETTERS[1:3], nrow(tdat3), replace=TRUE))
+tmdl3 <- mgcv::gam(y ~ s(x0, by=fac) + s(x1, by=foo)
+		     + ti(x0,x1, by=fac), data=tdat3)
 
 ### Output ###
-usethis::use_data(mdl, mdl_fac, internal=TRUE, overwrite=TRUE)
+usethis::use_data(mdl, mdl_fac, tmdl0, x2max, tmdl1, tmdl2, tmdl3, tdat, tdat3,
+		  internal=TRUE, overwrite=TRUE)
