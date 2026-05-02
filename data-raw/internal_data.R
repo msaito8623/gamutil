@@ -27,7 +27,7 @@ example_df <- function (n=1000) {
 	dat <- data.frame(y, x0, x1, x2)
 	return(dat)
 }
-dat <- gamutil::example_df()
+dat <- example_df()
 mdl <- gam(y ~ s(x0) + s(x1) + s(x2) +
 	       ti(x0, x1) + ti(x0, x2) + ti(x1, x2) +
 	       ti(x0, x1, x2), data=dat)
@@ -55,6 +55,10 @@ tdat3$foo <- factor(sample(LETTERS[1:3], nrow(tdat3), replace=TRUE))
 tmdl3 <- mgcv::gam(y ~ s(x0, by=fac) + s(x1, by=foo)
 		     + ti(x0,x1, by=fac), data=tdat3)
 
+# Parametric-only model with a ":" interaction; used to test that
+# add_fit's term-selection logic decomposes f:x into c("f","x").
+tmdl_pi <- mgcv::gam(y ~ fac + x0 + fac:x0, data=tdat)
+
 ### Output ###
 usethis::use_data(mdl, mdl_fac, tmdl0, x2max, tmdl1, tmdl2, tmdl3, tdat, tdat3,
-		  internal=TRUE, overwrite=TRUE)
+		  tmdl_pi, internal=TRUE, overwrite=TRUE)

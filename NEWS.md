@@ -1,3 +1,20 @@
+# gamutil 0.7.0
+
+* Minimum R version bumped to 3.5.
+
+* `add_fit()` can now handle parametric `:`-interactions (e.g., `y ~ fac + x +
+  fac:x`). Previously the term-selection helper `find.pos()` did not split
+  `fac:x` into its component variables, so the interaction was silently
+  excluded. With this fix, `terms.size = "min"` selects the interaction term
+  itself, while `"medium"` and `"max"` include it together with the matching
+  main effects.
+
+* New argument `include.parametric` (default `TRUE`) in `add_fit()` and
+  `plot_contour()`. With `FALSE`, only smooth terms are eligible for the
+  partial-effect computation; all parametric terms (main effects and
+  `:`-interactions) are dropped. Useful for visualizing the smooth-only
+  contribution in models that mix parametric and smooth predictors.
+
 # gamutil 0.6.0
 
 * Vignettes are updated.

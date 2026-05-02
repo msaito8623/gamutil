@@ -32,6 +32,12 @@
 #' @param verbose Logical. With this argument TRUE, it is printed out which
 #' terms are selected to calculate predicted values and some explanations will
 #' be printed when an error occurs.
+#' @param include.parametric Logical. With TRUE (default), parametric terms
+#' (e.g., main effects like \code{x} or \code{:}-interactions like \code{fac:x})
+#' are eligible for inclusion in the partial effect, just like smooth terms.
+#' With FALSE, only smooth terms are kept. This is useful for visualizing the
+#' smooth-only contribution in models that mix parametric and smooth
+#' predictors.
 #' @return The data.frame provided through "ndat" with additional columns for
 #' predicted values (i.e., fit) and upper and lower confidence interval
 #' boundaries (i.e., upr and lwr).
@@ -65,7 +71,8 @@
 #' @importFrom stats qnorm 
 #' @export
 add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
-		     ci.mult=qnorm(0.975), verbose=FALSE) {
+		     ci.mult=qnorm(0.975), verbose=FALSE,
+		     include.parametric=TRUE) {
 	if (is.null(terms)) {
 		if (verbose) {
 			cat('Selected: All (summed effect).\n')
@@ -76,7 +83,8 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 	} else {
 		cols <- as.character(mdl$formula)[3]
 		cols <- strsplit(cols, split=' \\+ ')[[1]]
-		pos <- find.pos(cols, terms, cond, terms.size)
+		pos <- find.pos(cols, terms, cond, terms.size,
+				include.parametric)
 		if (!any(pos)) {
 			if (verbose) {
 				print.verbose(terms, terms.size, cols)
@@ -115,13 +123,16 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 	ndat$lwr <- ndat$fit - ci.mult * ndat$se
 	return(ndat)
 }
-find.pos <- function (cols, terms, cond, terms.size) {
+find.pos <- function (cols, terms, cond, terms.size,
+		      include.parametric=TRUE) {
 	pos <- cols
 	pos <- remove.k(pos)
 	pos <- gsub(', *bs *= *"re"', '',pos)
 	pos <- gsub('by *= *', '',pos)
 	pos <- gsub('^[a-z]+\\((.+)\\)$', '\\1', pos)
-	pos <- strsplit(pos, split=', ')
+	# Split smooth-arg lists by ", " and parametric ":"-interactions
+	# by ":" so that e.g. "fac:x0" decomposes into c("fac","x0").
+	pos <- strsplit(pos, split=', |:')
 	tms <- c(terms, names(cond))
 	if (terms.size=='max') {
 		pos <- vapply(pos, pos.max, tms, FUN.VALUE=logical(1),
@@ -134,6 +145,13 @@ find.pos <- function (cols, terms, cond, terms.size) {
 			      USE.NAMES=FALSE)
 	} else {
 		stop('"terms.size" must be "max", "medium", or "min".')
+	}
+	if (!include.parametric) {
+		# Drop anything that isn't a smooth wrapper s(...)/te(...)/
+		# ti(...)/t2(...). Identifies smooths off the *original* cols
+		# strings (the gsubs above stripped the wrapper from `pos`).
+		is.smooth <- grepl('^(s|te|ti|t2) *\\(', cols)
+		pos <- pos & is.smooth
 	}
 	return(pos)
 }

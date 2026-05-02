@@ -48,6 +48,10 @@
 #' drawn.
 #' @param contour.line.size A numeric with its length 1. It controls thickness
 #' of contour lines. The default is 0.5.
+#' @param include.parametric Logical, passed through to \code{add_fit}. With
+#' TRUE (default), parametric terms (main effects and \code{:}-interactions)
+#' are eligible for the partial-effect computation. With FALSE, only smooth
+#' terms (\code{s}, \code{te}, \code{ti}, \code{t2}) are kept.
 #' @return A ggplot object, which is a contour line plot with predicted values
 #' as colors (z-axis).
 #' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
@@ -103,7 +107,8 @@ plot_contour <- function (mdl, view, cond=list(), summed=TRUE, axis.len=50,
 			  terms.size='min', se=TRUE, break.interval=NULL,
 			  contour.line.breaks=NULL, contour.color.breaks=NULL,
 			  zlim=NULL, facet.labeller=NULL, verbose=FALSE,
-			  contour.labels=TRUE, contour.line.size=0.5)
+			  contour.labels=TRUE, contour.line.size=0.5,
+			  include.parametric=TRUE)
 {
 	if (length(view)!=2) {
 		stop('"view" must be length 2.')
@@ -115,7 +120,8 @@ plot_contour <- function (mdl, view, cond=list(), summed=TRUE, axis.len=50,
 	ndat <- mdl_to_ndat(mdl, view, cond, len=axis.len,
 			    method=constant.method)
 	if (summed) tms<-NULL else tms<-view
-	ndat <- add_fit(ndat, mdl, tms, cond, terms.size, ci.mult, verbose)
+	ndat <- add_fit(ndat, mdl, tms, cond, terms.size, ci.mult, verbose,
+			include.parametric)
 	if (length(cond)>0) {
 		facet.cn <- names(cond)[vapply(names(cond), find.facet, ndat,
 					       FUN.VALUE=logical(1),

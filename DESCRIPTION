@@ -1,6 +1,6 @@
 Package: gamutil
 Title: Utilities to Facilitate Modeling Routines with Generalized Additive Models
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: 
     person(given = "Motoki",
            family = "Saito",
@@ -29,5 +29,5 @@ Suggests:
     RhpcBLASctl
 Config/testthat/edition: 3
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 VignetteBuilder: knitr
