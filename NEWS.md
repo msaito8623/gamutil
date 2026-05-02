@@ -15,6 +15,12 @@
   `:`-interactions) are dropped. Useful for visualizing the smooth-only
   contribution in models that mix parametric and smooth predictors.
 
+* `add_fit()` now correctly parses formulas that R's deparser has
+  line-wrapped (RHS over ~500 chars). Previously the inserted
+  `\n    ` whitespace inside terms like `s(x, by = f, \n    k = 3)`
+  broke the term-selection regexes, causing affected smooths to be
+  silently dropped from the partial-effect computation.
+
 # gamutil 0.6.0
 
 * Vignettes are updated.

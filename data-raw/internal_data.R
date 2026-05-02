@@ -59,6 +59,22 @@ tmdl3 <- mgcv::gam(y ~ s(x0, by=fac) + s(x1, by=foo)
 # add_fit's term-selection logic decomposes f:x into c("f","x").
 tmdl_pi <- mgcv::gam(y ~ fac + x0 + fac:x0, data=tdat)
 
+# Model with a deliberately long formula RHS (>500 chars) to force
+# R's deparser to insert "\n    " mid-term. Used to test that
+# add_fit normalizes whitespace before parsing.
+tdat_long <- tdat
+set.seed(534)
+for (v in paste0("very_long_predictor_name_", 1:15)) {
+	tdat_long[[v]] <- rnorm(nrow(tdat_long))
+}
+tmdl_long <- mgcv::gam(
+	as.formula(paste("y ~",
+		paste(sprintf("s(%s, k=3)",
+			      paste0("very_long_predictor_name_", 1:15)),
+		      collapse = " + "),
+		"+ fac + s(x0, by=fac, k=3)")),
+	data = tdat_long)
+
 ### Output ###
 usethis::use_data(mdl, mdl_fac, tmdl0, x2max, tmdl1, tmdl2, tmdl3, tdat, tdat3,
-		  tmdl_pi, internal=TRUE, overwrite=TRUE)
+		  tmdl_pi, tmdl_long, internal=TRUE, overwrite=TRUE)

@@ -82,6 +82,11 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 		ndat$se  <- pred$se.fit
 	} else {
 		cols <- as.character(mdl$formula)[3]
+		# Long formulas get line-wrapped by R's deparser, inserting
+		# "\n    " inside terms (e.g., "s(x, by = f, \n    k = 3)").
+		# The downstream regexes only handle plain spaces, so collapse
+		# all whitespace runs to a single space before parsing.
+		cols <- gsub('[[:space:]]+', ' ', cols)
 		cols <- strsplit(cols, split=' \\+ ')[[1]]
 		pos <- find.pos(cols, terms, cond, terms.size,
 				include.parametric)

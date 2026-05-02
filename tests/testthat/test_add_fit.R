@@ -161,6 +161,25 @@ test_that('add_fit include.parametric=FALSE drops a parametric-only model.', {
 			     ci.mult=1, include.parametric=FALSE),
 		     'No term matched')
 })
+test_that('add_fit handles deparse-wrapped formula RHS.', {
+	# tmdl_long has a >500-char RHS that R's deparser wraps into "\n    "
+	# mid-term (specifically, inside one of the s(..., k=3) calls).
+	# Without the whitespace-normalization step in add_fit, the wrapped
+	# term would be misparsed and the by-smooth dropped.
+	rhs <- as.character(formula(tmdl_long))[3]
+	expect_true(grepl('\n', rhs))   # confirms wrap is present in fixture
+	tgt  <- 'x0'
+	cnd  <- list(fac = levels(tmdl_long$model$fac))
+	ndat <- mdl_to_ndat(mdl = tmdl_long, target = tgt, cond = cnd, len = 10,
+			    method = median)
+	out  <- add_fit(ndat, tmdl_long, terms = tgt, cond = cnd,
+			terms.size = 'medium', ci.mult = 1)
+	# With the by-smooth selected, fit varies meaningfully with x0
+	# within each fac level. If the by-smooth were dropped, fit would
+	# be constant within each fac level (only the parametric fac shift).
+	by_fac_range <- tapply(out$fit, out$fac, function (x) diff(range(x)))
+	expect_true(all(by_fac_range > 0.05))
+})
 test_that('add_fit include.parametric does not affect smooth-only models.', {
 	# tmdl0 has only smooth terms wrt c(x0, x2, fac), so toggling
 	# include.parametric should not change the result.
