@@ -1,3 +1,38 @@
+# gamutil 0.7.0
+
+This is an update of the package currently on CRAN (v0.6.0).
+
+## Summary of changes
+
+* Bug fix: `add_fit()` now correctly handles parametric `:`-interactions
+  (e.g., `y ~ fac + x + fac:x`). The internal helper `find.pos()` previously
+  did not split `fac:x` into its component variables, so the interaction was
+  silently excluded from partial-effect computation under all `terms.size`
+  values. Numerical output for affected models will change.
+* New argument `include.parametric` (default `TRUE`) in `add_fit()` and
+  `plot_contour()`. With `FALSE`, only smooth terms (`s`, `te`, `ti`, `t2`)
+  are eligible for the partial-effect computation; useful for visualizing
+  the smooth-only contribution in models that mix parametric and smooth
+  predictors.
+* Minimum R version bumped to 3.5 (required by the binary serialization
+  version of the bundled internal data).
+
+## Test environments
+
+* Ubuntu 24.04, R 4.6.0 (local machine)
+* TODO: win-builder (devel + release)
+* TODO: R-hub (linux, windows, macos)
+
+## R CMD check results
+
+Local `R CMD check --as-cran`: 0 errors, 0 warnings, 0 notes.
+
+Any NOTEs that may appear in the remote checks are expected to match those
+documented for prior submissions (R-hub MiKTeX/`tidy`/Windows `NULL`
+artifacts), and would not reflect issues in the package itself.
+
+---
+
 # Fifth submission
 To the last submission, I still received the same comments about using more than two cores. This issue, however, could not be replicated on my local machine as well as on three different environments by Rhub. On all of these settings, no more than two cores is used as explicitly controled in the pertinent scripts. Multithreading is used only to fit GAM models. Therefore, in prior to this submission, I fitted all the internally-necessary GAM models. These models are now only loaded when testing. This is expected to eliminate this issue of multithreading.
 
