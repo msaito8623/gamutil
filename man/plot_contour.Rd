@@ -19,7 +19,8 @@ plot_contour(
   facet.labeller = NULL,
   verbose = FALSE,
   contour.labels = TRUE,
-  contour.line.size = 0.5
+  contour.line.size = 0.5,
+  include.parametric = TRUE
 )
 }
 \arguments{
@@ -79,6 +80,11 @@ drawn.}
 
 \item{contour.line.size}{A numeric with its length 1. It controls thickness
 of contour lines. The default is 0.5.}
+
+\item{include.parametric}{Logical, passed through to \code{add_fit}. With
+TRUE (default), parametric terms (main effects and \code{:}-interactions)
+are eligible for the partial-effect computation. With FALSE, only smooth
+terms (\code{s}, \code{te}, \code{ti}, \code{t2}) are kept.}
 }
 \value{
 A ggplot object, which is a contour line plot with predicted values

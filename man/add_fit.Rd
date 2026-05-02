@@ -11,7 +11,8 @@ add_fit(
   cond = list(),
   terms.size = "min",
   ci.mult = qnorm(0.975),
-  verbose = FALSE
+  verbose = FALSE,
+  include.parametric = TRUE
 )
 }
 \arguments{
@@ -47,6 +48,13 @@ s(x1,by=fac), ti(x0,x1,by=fac), and so on.
 \item{verbose}{Logical. With this argument TRUE, it is printed out which
 terms are selected to calculate predicted values and some explanations will
 be printed when an error occurs.}
+
+\item{include.parametric}{Logical. With TRUE (default), parametric terms
+(e.g., main effects like \code{x} or \code{:}-interactions like \code{fac:x})
+are eligible for inclusion in the partial effect, just like smooth terms.
+With FALSE, only smooth terms are kept. This is useful for visualizing the
+smooth-only contribution in models that mix parametric and smooth
+predictors.}
 }
 \value{
 The data.frame provided through "ndat" with additional columns for

@@ -87,7 +87,7 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 				include.parametric)
 		if (!any(pos)) {
 			if (verbose) {
-				print.verbose(terms, terms.size, cols)
+				print_verbose(terms, terms.size, cols)
 			}
 			stop('No term matched.')
 		}
@@ -184,7 +184,7 @@ find.by <- function (xxx) {
 	}
 	return(xxx)
 }
-print.verbose <- function (terms, terms.size, cols) {
+print_verbose <- function (terms, terms.size, cols) {
 	cat('\n###### VERBOSE ######\n')
 	cat('ERROR: No term is matched.\n\n')
 	cat(sprintf('terms = c(%s)\n', paste(terms, collapse=', ')))
