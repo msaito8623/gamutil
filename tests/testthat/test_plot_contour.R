@@ -335,3 +335,41 @@ test_that('plot_contour, summed=FALSE, cond=list(fac=c("1","4"),x2=x2max),
 test_that('plot_contour returns an error when view is not length=2.', {
 	expect_error(plot_contour(tmdl0, c('x0'), list(fac='1'), TRUE))
 })
+test_that('exclude_too_far returns no exclusions when too.far is NULL or 0.', {
+	gx <- runif(100, 0, 1); gy <- runif(100, 0, 1)
+	dx <- runif(50,  0, 1); dy <- runif(50,  0, 1)
+	expect_false(any(gamutil:::exclude_too_far(gx, gy, dx, dy, NULL)))
+	expect_false(any(gamutil:::exclude_too_far(gx, gy, dx, dy, 0)))
+})
+test_that('exclude_too_far excludes more cells with smaller too.far.', {
+	# Realistic setup: data forms an L-shape inside [0,1]^2, the grid
+	# spans the same data range (as mdl_to_ndat would build it).
+	# Cells in the "missing corner" of the L should be masked when
+	# too.far is small.
+	set.seed(42)
+	dx <- c(runif(40, 0, 1), runif(40, 0, 0.3))
+	dy <- c(runif(40, 0, 0.3), runif(40, 0, 1))
+	g <- expand.grid(seq(min(dx), max(dx), length.out = 20),
+			 seq(min(dy), max(dy), length.out = 20))
+	n_strict <- sum(gamutil:::exclude_too_far(g[,1], g[,2], dx, dy, 0.05))
+	n_perm   <- sum(gamutil:::exclude_too_far(g[,1], g[,2], dx, dy, 0.30))
+	n_huge   <- sum(gamutil:::exclude_too_far(g[,1], g[,2], dx, dy, 2.00))
+	expect_gt(n_strict, n_perm)
+	expect_gte(n_perm,  n_huge)
+	expect_equal(n_huge, 0)   # too.far=2 > sqrt(2) so cannot mask anything
+})
+test_that('plot_contour too.far=NULL produces no missing-row warning.', {
+	# With no masking, the contour stats should see a complete grid and
+	# emit no "Removed N rows containing non-finite" warning.
+	expect_silent(suppressMessages(
+		plot_contour(tmdl0, c('x0','x2'), list(fac='1'), TRUE,
+			     axis.len = 10, too.far = NULL)))
+})
+test_that('plot_contour too.far masks at least some cells.', {
+	# Strict masking causes ggplot's contour stats to warn that some
+	# rows containing non-finite values were removed during rendering.
+	# The warning fires when the plot is built, not when constructed.
+	plt <- plot_contour(tmdl0, c('x0','x2'), list(fac='1'), TRUE,
+			    axis.len = 20, too.far = 0.05)
+	expect_warning(ggplot_build(plt), 'non-finite')
+})

@@ -9,6 +9,15 @@
   `:`-interaction, where cross-covariances are typically negative).
   Default behavior is unchanged.
 
+* New argument `too.far` (default `NULL`) in `plot_contour()`.
+  When non-NULL, grid cells whose nearest data point is farther
+  than `too.far` (Euclidean distance after each axis is rescaled
+  to `[0, 1]` via the data's min/max) are masked out by setting
+  `fit`, `se`, `lwr`, `upr` to `NA`. This prevents the plot from
+  showing extrapolated regions the model has no support for.
+  Mirrors the `too.far` argument of `mgcv::vis.gam` and
+  `itsadug::fvisgam`.
+
 # gamutil 0.7.0
 
 * Minimum R version bumped to 3.5.

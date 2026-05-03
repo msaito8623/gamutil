@@ -21,7 +21,8 @@ plot_contour(
   contour.labels = TRUE,
   contour.line.size = 0.5,
   include.parametric = TRUE,
-  joint.se = FALSE
+  joint.se = FALSE,
+  too.far = NULL
 )
 }
 \arguments{
@@ -91,6 +92,16 @@ terms (\code{s}, \code{te}, \code{ti}, \code{t2}) are kept.}
 (default), the SE of the summed partial effect is computed by summing
 per-term variances; with TRUE, the joint SE is computed via the lpmatrix
 and full \code{vcov(mdl)}, accounting for cross-term covariances.}
+
+\item{too.far}{A single numeric or NULL. If non-NULL, grid cells whose
+nearest data point is farther than \code{too.far} (Euclidean distance
+after each axis is rescaled to \code{[0, 1]} via the data's min/max)
+are masked out by setting \code{fit}, \code{se}, \code{lwr}, \code{upr}
+to \code{NA}. This prevents the plot from showing extrapolated regions
+the model has no support for. Typical values: 0.05 (strict), 0.10
+(moderate), 0.20 (permissive). NULL (default) disables masking.
+Mirrors the \code{too.far} argument of \code{mgcv::vis.gam} and
+\code{itsadug::fvisgam}.}
 }
 \value{
 A ggplot object, which is a contour line plot with predicted values
