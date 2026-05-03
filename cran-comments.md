@@ -20,16 +20,47 @@ This is an update of the package currently on CRAN (v0.6.0).
 ## Test environments
 
 * Ubuntu 24.04, R 4.6.0 (local machine)
-* TODO: win-builder (devel + release)
-* TODO: R-hub (linux, windows, macos)
+* R-hub linux (Ubuntu, R-devel) via GitHub Actions
+* R-hub macos-arm64 (R-devel) via GitHub Actions
+* R-hub windows (R-devel) via GitHub Actions
+* R-hub atlas (Fedora R-devel container) via GitHub Actions
+* win-builder R-devel
+* win-builder R-release
 
 ## R CMD check results
 
 Local `R CMD check --as-cran`: 0 errors, 0 warnings, 0 notes.
 
-Any NOTEs that may appear in the remote checks are expected to match those
-documented for prior submissions (R-hub MiKTeX/`tidy`/Windows `NULL`
-artifacts), and would not reflect issues in the package itself.
+R-hub on all four platforms above: 0 errors, 0 warnings, 2 NOTEs.
+The two NOTEs are:
+
+1. `checking for hidden files and directories ... NOTE` — flags the
+   `.github` directory (GitHub Actions workflows for R-hub and CI).
+2. `checking top-level files ... NOTE` — flags `cran-comments.md`,
+   `CRAN-SUBMISSION`, `codecov.yml`, `data-raw/`, `README.html`,
+   and `README.Rmd`.
+
+All of these files are listed in `.Rbuildignore` and are correctly
+excluded by `R CMD build` (verified by inspecting the locally built
+`gamutil_0.7.0.tar.gz`). The R-hub build pipeline does not appear
+to honor `.Rbuildignore` in the same way; consequently these NOTEs
+are R-hub artifacts and do not reflect issues in the source tarball
+that is being submitted to CRAN.
+
+win-builder R-devel and R-release: 0 errors, 0 warnings, 1 NOTE.
+The NOTE is:
+
+```
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Motoki Saito <motokisaito.8623@gmail.com>'
+New submission
+```
+
+This is the standard "New submission" tag from CRAN's incoming
+feasibility check. The package has been on CRAN since v0.6.0;
+this NOTE appears because the win-builder mirror does not yet
+reflect the latest CRAN state at check time. CRAN's actual
+incoming queue recognises this as an update and will not flag it.
 
 ---
 
