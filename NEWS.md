@@ -15,6 +15,17 @@
   to the other, so the same call site can be reused across model
   shapes.
 
+* `add_fit()` now correctly retains the parametric main effect of
+  the by-variable (e.g. `f` in `~ f + s(x, by=f)`) when
+  `terms.size = "medium"` or `"max"`. Previously, the by-variable
+  expansion logic also caught the parametric main effect by string
+  matching and rewrote it into per-level names (`fA`, `fB`, ...)
+  that do not exist as columns of `predict.gam(type="terms")`.
+  mgcv silently dropped them and the fit was missing the
+  main-effect intercept shift between levels. The new joint.se
+  path was not affected; with the fix, both paths now return
+  identical fits.
+
 * New argument `joint.se` (default `FALSE`) in `add_fit()` and
   `plot_contour()`. With `TRUE`, the standard error of the summed
   partial effect is computed via the lpmatrix and full `vcov(mdl)`

@@ -136,13 +136,27 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 		}
 		cols <- gsub(' ','', cols)
 		if (byvar!='') {
+			# Rewrite "s(x,by=f,k=3)" -> "s(x,k=3):f" so the by-smooth
+			# columns line up with predict.gam(type='terms')'s
+			# per-level naming after expansion.
 			cols <- gsub('^(.+),by=(.+?)([,\\)].*)$', '\\1\\3:\\2',
 				     cols)
-			cols.noby <- grep(byvar, cols, value=TRUE, invert=TRUE)
-			cols <- grep(byvar, cols, value=TRUE, invert=FALSE)
-			cols <- expand.grid(cols, cond[[byvar]])
-			cols <- apply(cols, 1, paste, collapse='')
-			cols <- c(cols, cols.noby)
+			# Only by-smooth columns end in ":<byvar>" after the
+			# rewrite; the parametric main effect of byvar (if
+			# present) keeps its bare term name and must NOT be
+			# per-level expanded -- mgcv's terms matrix has only
+			# one column for it (e.g. "f"), not per-level columns
+			# ("fA", "fB", ...).
+			by_re <- paste0(':', byvar, '$')
+			cols.expand <- grep(by_re, cols, value=TRUE)
+			cols.other  <- setdiff(cols, cols.expand)
+			if (length(cols.expand) > 0) {
+				cols.expand <- expand.grid(cols.expand,
+							    cond[[byvar]])
+				cols.expand <- apply(cols.expand, 1,
+						     paste, collapse='')
+			}
+			cols <- c(cols.expand, cols.other)
 		}
 		cols <- remove.k(cols)
 		sw   <- suppressWarnings

@@ -236,6 +236,33 @@ test_that('joint.se has no effect when terms is NULL (full summed).', {
 	expect_equal(a$fit, b$fit)
 	expect_equal(a$se,  b$se)
 })
+test_that('marginal path keeps parametric main effect of by-variable (regression).', {
+	# When a model has both a parametric main effect of f and a by-smooth
+	# s(x, by=f), the marginal-path by-expansion used to incorrectly catch
+	# the parametric f and rewrite it into f<level> names that mgcv does
+	# not recognise, silently dropping the main effect from the fit. The
+	# joint.se path bypassed this bug. This test confirms that, after
+	# the fix, the two paths return identical fit values.
+	set.seed(11); n <- 600
+	d <- data.frame(x = rnorm(n),
+			f = factor(sample(c('A','B','C'), n, TRUE)))
+	# Enforce different intercepts per level + level-specific x slopes,
+	# so the parametric main effect contributes meaningfully to the fit.
+	d$y <- 0.5*d$x + ifelse(d$f=='B', -0.6, 0) + ifelse(d$f=='C', 0.4, 0) +
+	       ifelse(d$f=='B', -0.5*d$x, 0) + rnorm(n, 0, .3)
+	m <- mgcv::bam(y ~ f + s(x, by=f, k=3), data=d, method='ML')
+	nd <- mdl_to_ndat(m, target=c('x','f'), len=10, method=median)
+	out_m <- add_fit(nd, m, terms=c('x','f'),
+			 cond=list(f=levels(d$f)),
+			 terms.size='medium', ci.mult=1)
+	out_j <- add_fit(nd, m, terms=c('x','f'),
+			 cond=list(f=levels(d$f)),
+			 terms.size='medium', ci.mult=1, joint.se=TRUE)
+	expect_equal(out_m$fit, out_j$fit, tolerance = 1e-9)
+	# Sanity: the parametric main effect must shift the per-level means.
+	mean_by_lev <- tapply(out_m$fit, out_m$f, mean)
+	expect_gt(diff(range(mean_by_lev)), 0.2)
+})
 test_that('joint.se on a smooth-only model is close to the marginal SE.', {
 	# tmdl0's selected terms (s(x0,by=fac=1) + s(x2)) have only modest
 	# cross-covariance in practice; joint and marginal SE differ by
