@@ -96,6 +96,6 @@ print(plt)
 }
 }
 \author{
-Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 }
 \keyword{utilities}

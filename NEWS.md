@@ -1,4 +1,19 @@
-# gamutil 0.7.1
+# gamutil 0.8.0
+
+* New exported function `plot_curve()`. Builds a ggplot of the
+  partial effect of a single continuous predictor (with an optional
+  SE ribbon), or one continuous + one categorical predictor (one
+  line per factor level, coloured by level). Smooth/line counterpart
+  to `plot_contour()`. Named `plot_curve` to avoid colliding with
+  `itsadug::plot_smooth`.
+
+* New exported function `plot_partial()`. Convenience dispatcher
+  that picks `plot_contour` (for two numeric `view` variables) or
+  `plot_curve` (for one numeric, or one numeric + one factor).
+  Arguments specific to one underlying function (e.g. `too.far`,
+  `zlim` from `plot_contour`) are silently dropped when dispatching
+  to the other, so the same call site can be reused across model
+  shapes.
 
 * New argument `joint.se` (default `FALSE`) in `add_fit()` and
   `plot_contour()`. With `TRUE`, the standard error of the summed

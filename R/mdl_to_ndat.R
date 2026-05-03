@@ -20,7 +20,7 @@
 #' @return A data.frame with the variables specified by "target" being varied
 #' and the other variables being kept constant. The returned data.frame should
 #' be ready to be used for, e.g., predict.gam.
-#' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+#' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
 #' library(mgcv)

@@ -50,7 +50,7 @@
 #' @return The data.frame provided through "ndat" with additional columns for
 #' predicted values (i.e., fit) and upper and lower confidence interval
 #' boundaries (i.e., upr and lwr).
-#' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+#' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
 #' \dontrun{

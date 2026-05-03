@@ -50,6 +50,6 @@ print(length(unique(ndat$x2))==2) # x2 is 25\% or 75\% quantiles.
 print(length(unique(ndat$x3))==1) # x3 is fixed the median.
 }
 \author{
-Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 }
 \keyword{utilities}

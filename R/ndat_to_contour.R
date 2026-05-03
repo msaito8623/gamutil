@@ -37,7 +37,7 @@
 #' of contour lines. The default is 0.5.
 #' @return A ggplot object of a contour plot with predicted values being colors
 #' (z-axis).
-#' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+#' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
 #' \dontrun{

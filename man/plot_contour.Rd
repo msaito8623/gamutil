@@ -161,6 +161,6 @@ plt <- plot_contour(mdl2, view=c('x0','x1'), cond=list(fac=c('1','2')),
 }
 }
 \author{
-Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 }
 \keyword{utilities}

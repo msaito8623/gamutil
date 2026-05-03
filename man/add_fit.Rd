@@ -107,6 +107,6 @@ ndat4 <- add_fit(ndat, model, terms=terms_to_predict, terms.size="max",
 }
 }
 \author{
-Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 }
 \keyword{utilities}

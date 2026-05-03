@@ -67,7 +67,7 @@
 #' \code{itsadug::fvisgam}.
 #' @return A ggplot object, which is a contour line plot with predicted values
 #' as colors (z-axis).
-#' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+#' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
 #' \dontrun{
