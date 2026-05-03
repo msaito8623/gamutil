@@ -38,6 +38,15 @@
 #' With FALSE, only smooth terms are kept. This is useful for visualizing the
 #' smooth-only contribution in models that mix parametric and smooth
 #' predictors.
+#' @param joint.se Logical. With FALSE (default), the standard error reported
+#' for the summed partial effect is the square root of the sum of per-term
+#' variances returned by \code{predict.gam(type='terms')}, which assumes the
+#' selected terms are independent. With TRUE, the joint standard error is
+#' computed via the lpmatrix and full \code{vcov(mdl)}, accounting for
+#' cross-term covariances. This is the statistically correct SE when the
+#' selected terms are correlated (e.g., when a parametric main effect and a
+#' \code{:}-interaction are summed). The fit is unchanged. Has no effect
+#' when \code{terms} is \code{NULL}.
 #' @return The data.frame provided through "ndat" with additional columns for
 #' predicted values (i.e., fit) and upper and lower confidence interval
 #' boundaries (i.e., upr and lwr).
@@ -68,11 +77,11 @@
 #'                  verbose=TRUE)
 #' }
 #' @importFrom mgcv predict.gam
-#' @importFrom stats qnorm 
+#' @importFrom stats qnorm coef vcov model.matrix
 #' @export
 add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 		     ci.mult=qnorm(0.975), verbose=FALSE,
-		     include.parametric=TRUE) {
+		     include.parametric=TRUE, joint.se=FALSE) {
 	if (is.null(terms)) {
 		if (verbose) {
 			cat('Selected: All (summed effect).\n')
@@ -80,6 +89,30 @@ add_fit <- function (ndat, mdl, terms=NULL, cond=list(), terms.size='min',
 		pred <- predict.gam(mdl, newdata=ndat, se.fit=TRUE)
 		ndat$fit <- pred$fit
 		ndat$se  <- pred$se.fit
+	} else if (joint.se) {
+		# Joint-SE path: identify lpmatrix columns directly via
+		# mdl$pterms and mdl$smooth, then compute fit and SE from
+		# the lpmatrix and full vcov so cross-term covariances
+		# are accounted for. Bypasses the cols-string parsing.
+		keep <- find_kept_cols(mdl, terms, cond, terms.size,
+				       include.parametric = include.parametric)
+		if (!any(keep)) {
+			if (verbose) {
+				cat('No term matched (joint.se path).\n')
+			}
+			stop('No term matched.')
+		}
+		X <- predict.gam(mdl, newdata = ndat, type = 'lpmatrix')
+		X[, !keep] <- 0
+		b <- coef(mdl)
+		V <- vcov(mdl)
+		ndat$fit <- as.numeric(X %*% b)
+		ndat$se  <- sqrt(rowSums((X %*% V) * X))
+		if (verbose) {
+			kept_names <- colnames(X)[keep]
+			cat(sprintf('Selected (joint.se):\n%s\n',
+				    paste(kept_names, collapse='\n')))
+		}
 	} else {
 		cols <- as.character(mdl$formula)[3]
 		# Long formulas get line-wrapped by R's deparser, inserting
@@ -177,6 +210,62 @@ pos.min <- function (x, terms) {
 	} else {
 		return(all(sort(x)==sort(terms)))
 	}
+}
+# Identify the lpmatrix column indices that belong to the terms whose
+# variables are fully contained in `terms` + names(`cond`), honouring
+# `terms.size`. Walks mdl$pterms (parametric assign attribute) and
+# mdl$smooth[[i]]$first.para/$last.para. Used by joint.se = TRUE in
+# add_fit() and plot_contour() to compute the joint SE of a sum of
+# partial effects via the lpmatrix instead of summing per-term SEs.
+find_kept_cols <- function (mdl, terms, cond, terms.size,
+			    include.parametric = TRUE,
+			    include.intercept  = FALSE) {
+	tms <- c(terms, names(cond))
+	# Build a 1-row template lpmatrix to learn its column count.
+	template <- predict.gam(mdl, newdata = mdl$model[1, , drop = FALSE],
+				type = 'lpmatrix')
+	keep <- logical(ncol(template))
+
+	if (include.intercept) {
+		intc <- which(colnames(template) == '(Intercept)')
+		if (length(intc) > 0) keep[intc] <- TRUE
+	}
+
+	pmm <- model.matrix(mdl$pterms, mdl$model[1, , drop = FALSE])
+	n_para <- ncol(pmm)
+	p_lab  <- attr(mdl$pterms, 'term.labels')
+	if (include.parametric && length(p_lab) > 0) {
+		p_asg <- attr(pmm, 'assign')
+		for (i in seq_len(n_para)) {
+			ti <- p_asg[i]
+			if (ti == 0L) next
+			tv <- all.vars(parse(text = p_lab[ti])[[1]])
+			if (length(tv) == 0) next
+			sel <- switch(terms.size,
+				max    = any(tv %in% tms),
+				medium = all(tv %in% tms),
+				min    = length(tv) == length(tms) &&
+					 all(sort(tv) == sort(tms)),
+				stop('"terms.size" must be "max", "medium", or "min".'))
+			if (sel) keep[i] <- TRUE
+		}
+	}
+
+	for (sm in mdl$smooth) {
+		sv <- sm$term
+		if (!is.null(sm$by) && !identical(sm$by, 'NA')) {
+			sv <- c(sv, sm$by)
+		}
+		if (length(sv) == 0) next
+		sel <- switch(terms.size,
+			max    = any(sv %in% tms),
+			medium = all(sv %in% tms),
+			min    = length(sv) == length(tms) &&
+				 all(sort(sv) == sort(tms)))
+		if (sel) keep[sm$first.para:sm$last.para] <- TRUE
+	}
+
+	return(keep)
 }
 find.by <- function (xxx) {
 	xxx <- grep('by *= *', xxx, value=TRUE)

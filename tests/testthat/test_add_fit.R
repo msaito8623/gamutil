@@ -195,3 +195,59 @@ test_that('add_fit include.parametric does not affect smooth-only models.', {
 	expect_equal(a$se,  b$se)
 	expect_equal(round(mean(a$fit), 5), -0.64058)
 })
+test_that('joint.se preserves fit but tightens SE on correlated terms.', {
+	# tmdl_pi: y ~ fac + x0 + fac:x0. The parametric main effects and
+	# the :-interaction are negatively correlated, so the marginal SE
+	# (sum-of-variances) overestimates the joint variance.
+	ndat <- mdl_to_ndat(mdl=tmdl_pi, target=c('x0','fac'), len=10,
+			    method=median)
+	marg  <- add_fit(ndat, tmdl_pi, terms=c('x0','fac'),
+			 terms.size='medium', ci.mult=1)
+	joint <- add_fit(ndat, tmdl_pi, terms=c('x0','fac'),
+			 terms.size='medium', ci.mult=1, joint.se=TRUE)
+	# Fit unchanged.
+	expect_equal(joint$fit, marg$fit)
+	# Joint SE strictly smaller than marginal here.
+	expect_lt(mean(joint$se), mean(marg$se))
+	expect_equal(round(mean(joint$se), 5), 0.8329)
+	# Joint partial fit equals (full summed prediction) - intercept,
+	# since tmdl_pi has only intercept + the three terms in 'medium'.
+	full <- add_fit(ndat, tmdl_pi, ci.mult=1)
+	icpt <- as.numeric(coef(tmdl_pi)['(Intercept)'])
+	expect_equal(joint$fit, as.numeric(full$fit) - icpt)
+})
+test_that('joint.se=FALSE (default) preserves backward compatibility.', {
+	# Default path must give the same numbers as the prior medium test.
+	ndat <- mdl_to_ndat(mdl=tmdl_pi, target=c('x0','fac'), len=10,
+			    method=median)
+	out <- add_fit(ndat, tmdl_pi, terms=c('x0','fac'),
+		       terms.size='medium', ci.mult=1)  # joint.se default FALSE
+	expect_equal(round(mean(out$fit), 5), 4.81159)
+	# Marginal SE per the original test snapshot.
+	expect_gt(mean(out$se), 0.83)   # > joint SE (0.8329)
+})
+test_that('joint.se has no effect when terms is NULL (full summed).', {
+	# With terms=NULL, add_fit calls predict.gam(se.fit=TRUE) directly,
+	# which already returns the joint SE; joint.se should be ignored.
+	ndat <- mdl_to_ndat(mdl=tmdl0, target=c('x0','x2'),
+			    cond=list(fac='1'), len=10, method=median)
+	a <- add_fit(ndat, tmdl0, ci.mult=1)
+	b <- add_fit(ndat, tmdl0, ci.mult=1, joint.se=TRUE)
+	expect_equal(a$fit, b$fit)
+	expect_equal(a$se,  b$se)
+})
+test_that('joint.se on a smooth-only model is close to the marginal SE.', {
+	# tmdl0's selected terms (s(x0,by=fac=1) + s(x2)) have only modest
+	# cross-covariance in practice; joint and marginal SE differ by
+	# at most a few percent. Fit is identical.
+	ndat <- mdl_to_ndat(mdl=tmdl0, target=c('x0','x2'),
+			    cond=list(fac='1'), len=10, method=median)
+	marg  <- add_fit(ndat, tmdl0, terms=c('x0','x2'),
+			 cond=list(fac='1'), terms.size='medium', ci.mult=1)
+	joint <- add_fit(ndat, tmdl0, terms=c('x0','x2'),
+			 cond=list(fac='1'), terms.size='medium', ci.mult=1,
+			 joint.se=TRUE)
+	expect_equal(joint$fit, marg$fit, tolerance = 1e-6)
+	# SEs should be in the same ballpark (within ~10%).
+	expect_lt(max(abs(joint$se - marg$se) / marg$se), 0.10)
+})

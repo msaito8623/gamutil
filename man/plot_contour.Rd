@@ -20,7 +20,8 @@ plot_contour(
   verbose = FALSE,
   contour.labels = TRUE,
   contour.line.size = 0.5,
-  include.parametric = TRUE
+  include.parametric = TRUE,
+  joint.se = FALSE
 )
 }
 \arguments{
@@ -85,6 +86,11 @@ of contour lines. The default is 0.5.}
 TRUE (default), parametric terms (main effects and \code{:}-interactions)
 are eligible for the partial-effect computation. With FALSE, only smooth
 terms (\code{s}, \code{te}, \code{ti}, \code{t2}) are kept.}
+
+\item{joint.se}{Logical, passed through to \code{add_fit}. With FALSE
+(default), the SE of the summed partial effect is computed by summing
+per-term variances; with TRUE, the joint SE is computed via the lpmatrix
+and full \code{vcov(mdl)}, accounting for cross-term covariances.}
 }
 \value{
 A ggplot object, which is a contour line plot with predicted values

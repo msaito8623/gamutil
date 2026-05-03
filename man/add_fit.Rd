@@ -12,7 +12,8 @@ add_fit(
   terms.size = "min",
   ci.mult = qnorm(0.975),
   verbose = FALSE,
-  include.parametric = TRUE
+  include.parametric = TRUE,
+  joint.se = FALSE
 )
 }
 \arguments{
@@ -55,6 +56,16 @@ are eligible for inclusion in the partial effect, just like smooth terms.
 With FALSE, only smooth terms are kept. This is useful for visualizing the
 smooth-only contribution in models that mix parametric and smooth
 predictors.}
+
+\item{joint.se}{Logical. With FALSE (default), the standard error reported
+for the summed partial effect is the square root of the sum of per-term
+variances returned by \code{predict.gam(type='terms')}, which assumes the
+selected terms are independent. With TRUE, the joint standard error is
+computed via the lpmatrix and full \code{vcov(mdl)}, accounting for
+cross-term covariances. This is the statistically correct SE when the
+selected terms are correlated (e.g., when a parametric main effect and a
+\code{:}-interaction are summed). The fit is unchanged. Has no effect
+when \code{terms} is \code{NULL}.}
 }
 \value{
 The data.frame provided through "ndat" with additional columns for

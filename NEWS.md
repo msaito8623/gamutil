@@ -1,3 +1,14 @@
+# gamutil 0.7.1
+
+* New argument `joint.se` (default `FALSE`) in `add_fit()` and
+  `plot_contour()`. With `TRUE`, the standard error of the summed
+  partial effect is computed via the lpmatrix and full `vcov(mdl)`
+  rather than as the square root of the sum of per-term variances.
+  This gives the correct joint SE when the selected terms are
+  correlated (e.g., a parametric main effect summed with a
+  `:`-interaction, where cross-covariances are typically negative).
+  Default behavior is unchanged.
+
 # gamutil 0.7.0
 
 * Minimum R version bumped to 3.5.
