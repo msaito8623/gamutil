@@ -70,11 +70,11 @@
 #' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(mgcv)
 #' set.seed(534)
 #' dat <- gamSim(eg=6, verbose=FALSE)
-#' 
+#'
 #' # Without "by"
 #' mdl1 <- gam(y ~ s(x0) + s(x1) + s(x2) + ti(x0,x1), data=dat)
 #' 

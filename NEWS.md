@@ -1,3 +1,16 @@
+# gamutil 0.8.1
+
+* Address CRAN reviewer feedback for resubmission:
+    - DESCRIPTION now references Wood (2017, ISBN:9781498728331) for the
+      underlying GAM methodology.
+    - All `\dontrun{}` example wrappers replaced with `\donttest{}`. The
+      examples are real, runnable code; they were wrapped only because
+      some fit non-trivial GAMs that may exceed CRAN's 5-second budget,
+      not because they cannot be executed.
+    - The `plot_partial()` example is now self-contained (the previous
+      example referenced model objects that were never defined inside
+      the example block).
+
 # gamutil 0.8.0
 
 * New exported function `plot_curve()`. Builds a ggplot of the

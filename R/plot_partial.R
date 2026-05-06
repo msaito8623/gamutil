@@ -22,12 +22,22 @@
 #' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' library(mgcv)
+#' set.seed(1)
+#'
 #' # Two numeric view variables -> contour plot.
-#' plot_partial(mdl_2num, view = c("x0", "x1"), summed = FALSE,
+#' dat2 <- gamSim(eg=2, verbose=FALSE)$data
+#' mdl_2num <- gam(y ~ s(x, z), data=dat2)
+#' plot_partial(mdl_2num, view = c("x", "z"), summed = FALSE,
 #'              terms.size = "medium", joint.se = TRUE, too.far = 0.10)
 #'
 #' # One numeric + one factor -> curve plot, one line per factor level.
+#' n <- 400
+#' d  <- data.frame(x = rnorm(n),
+#'                  f = factor(sample(c("A","B","C"), n, TRUE)))
+#' d$y <- d$x + ifelse(d$f == "A", 0.5*d$x, 0) + rnorm(n, 0, 0.5)
+#' mdl_num_fac <- bam(y ~ f + s(x, by = f, k = 3), data = d, method = "ML")
 #' plot_partial(mdl_num_fac, view = c("x", "f"), summed = FALSE,
 #'              terms.size = "medium", joint.se = TRUE)
 #' }

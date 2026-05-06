@@ -115,7 +115,7 @@ summed" effects of pertinent terms specified by the "view" argument (see
 examples).
 }
 \examples{
-\dontrun{
+\donttest{
 library(mgcv)
 set.seed(534)
 dat <- gamSim(eg=6, verbose=FALSE)

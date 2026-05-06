@@ -38,7 +38,7 @@
 #' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(mgcv)
 #' set.seed(1)
 #' n <- 400

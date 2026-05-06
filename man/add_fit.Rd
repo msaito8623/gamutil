@@ -82,7 +82,7 @@ errors based on the model provided through "mdl". "ndat" can be created by
 gamutil::to_ndat.
 }
 \examples{
-\dontrun{
+\donttest{
 library(mgcv)
 set.seed(534)
 dat <- gamSim(eg=6, verbose=FALSE)

@@ -68,7 +68,7 @@ When \code{view} contains a factor, the factor is automatically added to
 \code{add_fit}'s by-variable expansion has the levels it needs.
 }
 \examples{
-\dontrun{
+\donttest{
 library(mgcv)
 set.seed(1)
 n <- 400
