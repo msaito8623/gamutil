@@ -1,3 +1,85 @@
+# gamutil 0.8.1
+
+* Address CRAN reviewer feedback for resubmission:
+    - DESCRIPTION now references Wood (2017, ISBN:9781498728331) for the
+      underlying GAM methodology.
+    - All `\dontrun{}` example wrappers replaced with `\donttest{}`. The
+      examples are real, runnable code; they were wrapped only because
+      some fit non-trivial GAMs that may exceed CRAN's 5-second budget,
+      not because they cannot be executed.
+    - The `plot_partial()` example is now self-contained (the previous
+      example referenced model objects that were never defined inside
+      the example block).
+
+# gamutil 0.8.0
+
+* New exported function `plot_curve()`. Builds a ggplot of the
+  partial effect of a single continuous predictor (with an optional
+  SE ribbon), or one continuous + one categorical predictor (one
+  line per factor level, coloured by level). Smooth/line counterpart
+  to `plot_contour()`. Named `plot_curve` to avoid colliding with
+  `itsadug::plot_smooth`.
+
+* New exported function `plot_partial()`. Convenience dispatcher
+  that picks `plot_contour` (for two numeric `view` variables) or
+  `plot_curve` (for one numeric, or one numeric + one factor).
+  Arguments specific to one underlying function (e.g. `too.far`,
+  `zlim` from `plot_contour`) are silently dropped when dispatching
+  to the other, so the same call site can be reused across model
+  shapes.
+
+* `add_fit()` now correctly retains the parametric main effect of
+  the by-variable (e.g. `f` in `~ f + s(x, by=f)`) when
+  `terms.size = "medium"` or `"max"`. Previously, the by-variable
+  expansion logic also caught the parametric main effect by string
+  matching and rewrote it into per-level names (`fA`, `fB`, ...)
+  that do not exist as columns of `predict.gam(type="terms")`.
+  mgcv silently dropped them and the fit was missing the
+  main-effect intercept shift between levels. The new joint.se
+  path was not affected; with the fix, both paths now return
+  identical fits.
+
+* New argument `joint.se` (default `FALSE`) in `add_fit()` and
+  `plot_contour()`. With `TRUE`, the standard error of the summed
+  partial effect is computed via the lpmatrix and full `vcov(mdl)`
+  rather than as the square root of the sum of per-term variances.
+  This gives the correct joint SE when the selected terms are
+  correlated (e.g., a parametric main effect summed with a
+  `:`-interaction, where cross-covariances are typically negative).
+  Default behavior is unchanged.
+
+* New argument `too.far` (default `NULL`) in `plot_contour()`.
+  When non-NULL, grid cells whose nearest data point is farther
+  than `too.far` (Euclidean distance after each axis is rescaled
+  to `[0, 1]` via the data's min/max) are masked out by setting
+  `fit`, `se`, `lwr`, `upr` to `NA`. This prevents the plot from
+  showing extrapolated regions the model has no support for.
+  Mirrors the `too.far` argument of `mgcv::vis.gam` and
+  `itsadug::fvisgam`.
+
+# gamutil 0.7.0
+
+* Minimum R version bumped to 3.5.
+
+* `add_fit()` can now handle parametric `:`-interactions (e.g., `y ~ fac + x +
+  fac:x`). Previously the term-selection helper `find.pos()` did not split
+  `fac:x` into its component variables, so the interaction was silently
+  excluded. With this fix, `terms.size = "min"` selects the interaction term
+  itself, while `"medium"` and `"max"` include it together with the matching
+  main effects.
+
+* New argument `include.parametric` (default `TRUE`) in `add_fit()` and
+  `plot_contour()`. With `FALSE`, only smooth terms are eligible for the
+  partial-effect computation; all parametric terms (main effects and
+  `:`-interactions) are dropped. Useful for visualizing the smooth-only
+  contribution in models that mix parametric and smooth predictors.
+
+* `add_fit()` now correctly parses formulas that R's deparser has
+  line-wrapped (RHS over ~500 chars). Previously the inserted
+  `\n    ` whitespace inside terms like `s(x, by = f, \n    k = 3)`
+  broke the term-selection regexes, causing affected smooths to be
+  silently dropped from the partial-effect computation.
+
 # gamutil 0.6.0
 
 * Vignettes are updated.

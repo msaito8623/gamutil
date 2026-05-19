@@ -40,6 +40,6 @@ print(vary(vec))
 print(vary(vec, 4))
 }
 \author{
-Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 }
 \keyword{utilities}

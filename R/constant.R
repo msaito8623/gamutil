@@ -15,7 +15,7 @@
 #' single numeric value.
 #' @return A new format-like string, from which the terms you specified have
 #' been removed.
-#' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+#' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
 #' # The most frequent occurrence is returned for character/factor.

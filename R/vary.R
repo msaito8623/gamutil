@@ -15,7 +15,7 @@
 #' are required for each of the varied variables.
 #' @return A vector of numeric or character (depending on the class of "vec"
 #' provided).
-#' @author Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+#' @author Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 #' @keywords utilities
 #' @examples
 #' # The sorted unique values are returned for character/factor.

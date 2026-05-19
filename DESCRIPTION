@@ -1,13 +1,13 @@
 Package: gamutil
 Title: Utilities to Facilitate Modeling Routines with Generalized Additive Models
-Version: 0.6.0
+Version: 0.8.1
 Authors@R: 
     person(given = "Motoki",
            family = "Saito",
            role = c("aut", "cre"),
            email = "motokisaito.8623@gmail.com",
            comment = c(ORCID = "0000-0003-0785-5813"))
-Description: After fitting a Generalized Additive (Mixed) Model, the next step is often to obtain predicted values for certain combinations of predictors for visualization of estimated effects in the model. It involves constructing a new data frame, add predicted values, and finally makes a (contour) plot. This package is intended to facilitate these steps to visualize estimated effects in a generalized additive model.
+Description: After fitting a Generalized Additive (Mixed) Model, the next step is often to obtain predicted values for certain combinations of predictors for visualization of estimated effects in the model. It involves constructing a new data frame, add predicted values, and finally makes a (contour) plot. This package is intended to facilitate these steps to visualize estimated effects in a generalized additive model. The underlying modeling methodology is described in Wood (2017, ISBN:9781498728331).
 Imports:
     ggplot2,
     lifecycle,
@@ -21,7 +21,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
@@ -29,5 +29,5 @@ Suggests:
     RhpcBLASctl
 Config/testthat/edition: 3
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 VignetteBuilder: knitr

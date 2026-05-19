@@ -79,7 +79,7 @@ plot from the data.frame. "ndat" necessary for this function can be
 generated with gamutil::mdl_to_ndat and gamutil::add_fit.
 }
 \examples{
-\dontrun{
+\donttest{
 library(mgcv)
 set.seed(534)
 dat <- gamSim(eg=6,verbose=FALSE)
@@ -96,6 +96,6 @@ print(plt)
 }
 }
 \author{
-Motoki Saito, \email{motoki.saito@uni-tuebingen.de}
+Motoki Saito, \email{motoki.saito@uni-oldenburg.de}
 }
 \keyword{utilities}

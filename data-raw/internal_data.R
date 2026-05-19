@@ -27,7 +27,7 @@ example_df <- function (n=1000) {
 	dat <- data.frame(y, x0, x1, x2)
 	return(dat)
 }
-dat <- gamutil::example_df()
+dat <- example_df()
 mdl <- gam(y ~ s(x0) + s(x1) + s(x2) +
 	       ti(x0, x1) + ti(x0, x2) + ti(x1, x2) +
 	       ti(x0, x1, x2), data=dat)
@@ -55,6 +55,26 @@ tdat3$foo <- factor(sample(LETTERS[1:3], nrow(tdat3), replace=TRUE))
 tmdl3 <- mgcv::gam(y ~ s(x0, by=fac) + s(x1, by=foo)
 		     + ti(x0,x1, by=fac), data=tdat3)
 
+# Parametric-only model with a ":" interaction; used to test that
+# add_fit's term-selection logic decomposes f:x into c("f","x").
+tmdl_pi <- mgcv::gam(y ~ fac + x0 + fac:x0, data=tdat)
+
+# Model with a deliberately long formula RHS (>500 chars) to force
+# R's deparser to insert "\n    " mid-term. Used to test that
+# add_fit normalizes whitespace before parsing.
+tdat_long <- tdat
+set.seed(534)
+for (v in paste0("very_long_predictor_name_", 1:15)) {
+	tdat_long[[v]] <- rnorm(nrow(tdat_long))
+}
+tmdl_long <- mgcv::gam(
+	as.formula(paste("y ~",
+		paste(sprintf("s(%s, k=3)",
+			      paste0("very_long_predictor_name_", 1:15)),
+		      collapse = " + "),
+		"+ fac + s(x0, by=fac, k=3)")),
+	data = tdat_long)
+
 ### Output ###
 usethis::use_data(mdl, mdl_fac, tmdl0, x2max, tmdl1, tmdl2, tmdl3, tdat, tdat3,
-		  internal=TRUE, overwrite=TRUE)
+		  tmdl_pi, tmdl_long, internal=TRUE, overwrite=TRUE)
