@@ -5,6 +5,7 @@ cond
 cran
 deparser
 devtools
+df
 fac
 fvisgam
 gam
@@ -13,6 +14,9 @@ goodpractice
 gp
 hline
 itsadug
+kable
+kables
+knitr
 labeller
 len
 Lifecycle
@@ -25,9 +29,11 @@ ORCID
 pvisgam
 README
 regexes
+reStructuredText
 rhub
 Rij
 Rmd
+RST
 se
 upr
 vec

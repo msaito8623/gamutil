@@ -1,6 +1,6 @@
 Package: gamutil
 Title: Utilities to Facilitate Modeling Routines with Generalized Additive Models
-Version: 0.8.1
+Version: 0.9.0
 Authors@R: 
     person(given = "Motoki",
            family = "Saito",
@@ -22,9 +22,11 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Suggests: 
-    testthat (>= 3.0.0),
+Suggests:
     knitr,
+    lme4,
+    lmerTest,
+    testthat (>= 3.0.0),
     rmarkdown,
     RhpcBLASctl
 Config/testthat/edition: 3

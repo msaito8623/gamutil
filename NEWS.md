@@ -1,3 +1,22 @@
+# gamutil 0.9.0
+
+* New exported function `format_summary()`. Renders a model's
+  `summary()` as a `knitr::kable` table for LaTeX, Markdown, or RST.
+  Auto-detects the model type from the summary shape and selects
+  appropriate columns:
+    - `lm`, `glm`, `lme4::lmer`, `lme4::glmer`, `lmerTest::lmer`: a
+      single coefficient table (Estimate, SE, optional df, *t*/*z*,
+      optional *p*).
+    - `mgcv::gam`, `mgcv::bam`: parametric and smooth sub-tables.
+      The `gam_layout` argument chooses between a single stacked
+      table with embedded section-header rows (default) or a list
+      of two separate kables.
+
+* `lme4` and `lmerTest` added to `Suggests` (optional, exercised in
+  tests). `knitr` (already a `Suggests` for the vignettes) is also
+  used at runtime by `format_summary()`; the function errors
+  cleanly if `knitr` is not installed.
+
 # gamutil 0.8.1
 
 * Address CRAN reviewer feedback for resubmission:
